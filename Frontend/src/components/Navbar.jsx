@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import logo from '../assets/logoo.png'
 import Login from '../components/Login'
+import { useNavigate } from "react-router-dom";
 
 
 const Navbar = () => {
+  const navigate = useNavigate
   const [open, setOpen] = useState(false);
   const LoginSignUp = ()=>{
     const [action ,setAction] = useState("Sign up");
@@ -15,7 +17,7 @@ const Navbar = () => {
       {/* Navbar */}
       <div className='fixed h-26 z-5 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-4 sm:px-20 xl:px-32 '>
 
-            <img src={logo} alt="logo" className=' w-32 sm:w-44 cursor-pointer'  />
+            <img src={logo} alt="logo" className=' w-32 sm:w-44 cursor-pointer' onClick={()=>navigate('/')}  />
 
             
               
