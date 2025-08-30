@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import logo from '../assets/logo.jpeg'
+import logo from '../assets/logoo.png'
 import Login from '../components/Login'
 
 
@@ -13,8 +13,8 @@ const Navbar = () => {
   return (
     <>
       {/* Navbar */}
-      <div className="fixed z-50 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-4 sm:px-20 xl:px-32">
-        <img src={logo}  alt="logo" className="h-10 w-10 cursor-pointer" />
+      <div className="fixed z-50 w-full flex items-center justify-between h-30 px-0">
+        <img src={logo}  alt="logo" className="h-38 w-38 ml-0 cursor-pointer" />
 
         <button
           onClick={() => setOpen(true)}
