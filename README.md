@@ -70,15 +70,12 @@ This is the **MVP (Phase 1)** of a larger platform that will later include:
 ## 📊 Architecture Diagram (MVP)
 
 ```mermaid
-flowchart TD
-    A[Frontend (Next.js)] -->|Form Data| B[Django Backend API]
-    B -->|API Call| C[AI Service (FastAPI)]
-    C -->|LLM Prompt| D[OpenAI GPT/Claude]
-    D --> C
-    C -->|Roadmap JSON + Resume PDF| B
-    B -->|Store Data| E[PostgreSQL DB]
-    B -->|Send Response| A
-    A -->|Render Roadmap + Download Resume| User
+graph TD
+    A[Frontend (Next.js)] -->|Forms Input| B[Backend (FastAPI)]
+    B -->|API Calls| C[AI Service (LLM / ML Models)]
+    C -->|Results JSON| B
+    B -->|Processed Data| D[Database (PostgreSQL / MongoDB)]
+    B -->|Responses| A
 ```
 ## 📂 Project Structure
 
