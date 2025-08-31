@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 
 const LoginPopup = ({ onClose }) => {
   const [mode, setMode] = useState("signup"); // "signup" or "login"
@@ -7,6 +9,8 @@ const LoginPopup = ({ onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const API_URL = "http://127.0.0.1:8000/api";
 
@@ -41,7 +45,7 @@ const LoginPopup = ({ onClose }) => {
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
 
-        alert("Login successful!");
+        navigate('/tools')
         onClose(); // close popup
       }
 

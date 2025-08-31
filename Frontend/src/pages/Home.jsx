@@ -2,6 +2,9 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import Tools from '../components/Tools'
+import Feedback from '../components/Feedback'
+import Plan from '../components/plan'
+import Footer from '../components/Footer'
 
 const Home = () => {
   return (
@@ -9,6 +12,9 @@ const Home = () => {
         <Navbar/>
         <Hero/>
         <Tools/>
+        <Feedback/>
+        <Plan/>
+        <Footer/>
     </div>
   )
 }

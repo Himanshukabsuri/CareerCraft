@@ -1,8 +1,11 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import bg from '../assets/bg.jpg'
 import user_group from '../assets/user_group.png'
 const Hero = () => {
+
+    const navigate = useNavigate();
   return (
     <div style={{ backgroundImage: `url(${bg})` }} className='px-4 sm:px-20 xl:px-32 relative inline-flex flex-col w-full justify-center  bg-cover bg-no-repeat min-h-screen'>
 
@@ -13,7 +16,7 @@ const Hero = () => {
             </p>
         </div>
         <div className='flex flex-wrap justify-center gap-4 text-sm max-sm:text-xs'>
-            <button  className='bg-primary text-white px-10 py-3 rounded-lg
+            <button onClick={()=>navigate('/dashboard')}  className='bg-primary text-white px-10 py-3 rounded-lg
             hover:scale-102 active:scale-95 transition cursor-pointer'>
                 Start Creating Now
             </button>
