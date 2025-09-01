@@ -4,7 +4,7 @@ import Hero from '../components/Hero'
 import Tools from '../components/Tools'
 import Feedback from '../components/Feedback'
 import Footer from '../components/Footer'
-
+import Resume_builderForm from './Resume_builderForm'
 const Home = () => {
   return (
     <div>
@@ -13,6 +13,7 @@ const Home = () => {
         <Tools/>
         <Feedback/>
         <Footer/>
+        <Resume_builderForm />
     </div>
   )
 }
