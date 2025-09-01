@@ -1,52 +1,100 @@
 import React, { useState } from "react";
-import logo from '../assets/logoo.png'
-import Login from '../components/Login'
+import logo from '../assets/logoo.png';
+import Login from '../components/Login';
 import { useNavigate } from "react-router-dom";
 
-
 const Navbar = () => {
-  const navigate = useNavigate
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const LoginSignUp = ()=>{
-    const [action ,setAction] = useState("Sign up");
-    
-  }
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   return (
     <>
       {/* Navbar */}
-      <div className='fixed h-26 z-5 w-full backdrop-blur-2xl flex justify-between items-center py-3 px-4 sm:px-20 xl:px-32 '>
+      <nav className="absolute top-0 left-0 w-full z-60 bg-transparent py-4 px-6" style={{ zIndex: 60 }}>
+        <div className="w-full flex items-center justify-between px-6">
 
-            <img src={logo} alt="logo" className=' w-32 sm:w-44 cursor-pointer' onClick={()=>navigate('/')}  />
+          
+          {/* Logo - Far Left */}
+          <div className="flex-shrink-0">
+            <img
+              src={logo}
+              alt="Career Craft Logo"
+              className="w-36 sm:w-44 object-contain cursor-pointer"
+              onClick={() => navigate('/')}
+              aria-label="Navigate to homepage"
+            />
+          </div>
 
-            
-              
-                    <button onClick={() => setOpen(true)}     className='flex items-center gap-2 rounded-full text-sm cursor-pointer bg-primary text-white px-10 py-2.5'>Get Started </button>
-                
-            
-
-
-
-        </div>
-
-      {/* Popup (Modal) */}
-      {open && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-2xl shadow-xl w-96 relative">
-            {/* Close button */}
+          {/* Right Section: Get Started + Mobile Menu */}
+          <div className="flex items-center space-x-4">
+            {/* Get Started Button */}
             <button
-              onClick={() => setOpen(false)}
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              onClick={() => setOpen(true)}
+              className="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-200"
+              aria-label="Open login or signup modal"
             >
-              ✖
+              Get Started
             </button>
 
-            <h2 className="text-2xl font-semibold text-center mb-4">Welcome</h2>
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={toggleMenu}
+                className="text-white focus:outline-none"
+                aria-label="Toggle mobile menu"
+                aria-expanded={menuOpen}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
 
-            {/* Login/Signup form */}
-            
-          <Login/>
-            
+        {/* Mobile Menu */}
+        {menuOpen && (
+          <div className="md:hidden bg-white/90 shadow-lg rounded-b-lg mt-2">
+            <div className="flex flex-col space-y-4 py-4 px-6">
+              <button
+                onClick={() => {
+                  setOpen(true);
+                  setMenuOpen(false);
+                }}
+                className="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 transition-colors duration-200 text-left"
+              >
+                Get Started
+              </button>
+            </div>
+          </div>
+        )}
+      </nav>
+
+      {/* Login/Signup Modal */}
+      {open && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-70 transition-opacity duration-300">
+          <div className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md relative transform transition-all scale-100 animate-fadeIn">
+            <button
+              onClick={() => setOpen(false)}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-lg"
+              aria-label="Close modal"
+            >
+              ✕
+            </button>
+
+            <h2 className="text-2xl font-bold text-gray-800 text-center mb-6">Welcome to Career Craft</h2>
+
+            <Login />
           </div>
         </div>
       )}
@@ -55,5 +103,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-
