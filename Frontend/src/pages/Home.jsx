@@ -13,7 +13,7 @@ const Home = () => {
         <Tools/>
         <Feedback/>
         <Footer/>
-        <Resume_builderForm />
+        
     </div>
   )
 }
