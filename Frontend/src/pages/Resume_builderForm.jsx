@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 function ResumeBuilderForm() {
   const [resumedata, setResumedata] = useState({
@@ -6,6 +7,7 @@ function ResumeBuilderForm() {
     address: "",
     dob: "",
     email: "",
+    phone: "", 
     lastQualification: "",
     currentCourse: "",
     branch: "",
@@ -16,12 +18,42 @@ function ResumeBuilderForm() {
   });
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setResumedata({ ...resumedata, [name]: value });
+    setResumedata({ ...resumedata, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log("Form Data:", resumedata);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("access_token"); 
+      await axios.post(
+        "http://127.0.0.1:8000/api/form/",
+        {
+          name: resumedata.name,
+          dob: resumedata.dob,
+          email: resumedata.email,
+          phone: resumedata.phone,   // ✅ send phone
+          address: resumedata.address,
+          qualification: resumedata.lastQualification,
+          course: resumedata.currentCourse,
+          branch: resumedata.branch,
+          college: resumedata.college,
+          skill: resumedata.skill,
+          interest: resumedata.interest,
+        },
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      alert("Resume data saved successfully!");
+    } catch (error) {
+      console.error("Error saving resume data:", error.response?.data || error.message);
+      alert("Failed to save resume data. Check console for details.");
+    }
   };
 
   return (
@@ -79,6 +111,17 @@ function ResumeBuilderForm() {
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                   placeholder="Enter your email"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input 
+                  type="text" 
+                  name="phone" 
+                  value={resumedata.phone} 
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
+                  placeholder="Enter your Phone"
                 />
               </div>
             </div>
