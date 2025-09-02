@@ -5,7 +5,7 @@ import Tools from '../components/Tools'
 import Feedback from '../components/Feedback'
 import Plan from '../components/plan'
 import Footer from '../components/Footer'
-
+import Resume_builderForm from './Resume_builderForm'
 const Home = () => {
   return (
     <div>
@@ -15,6 +15,7 @@ const Home = () => {
         <Feedback/>
         <Plan/>
         <Footer/>
+        
     </div>
   )
 }
