@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { House, FileText } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -8,6 +8,25 @@ const navItems = [
 ];
 
 const Sidebar = ({ sidebar, setSidebar }) => {
+  const [username, setUsername] = useState(""); // 👈 state for username
+
+  useEffect(() => {
+    // API call to fetch logged-in user's username
+    fetch("http://localhost:8000/api/user/", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("access_token"), // JWT token
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to fetch user: " + res.status);
+        return res.json();
+      })
+      .then((data) => setUsername(data.username)) // 👈 set username from API
+      .catch((err) => console.error("Error fetching username:", err));
+  }, []);
+
   return (
     <div
       className={`w-60 bg-white border-r border-gray-200 flex flex-col justify-between items-center 
@@ -18,11 +37,14 @@ const Sidebar = ({ sidebar, setSidebar }) => {
       {/* Profile Section */}
       <div className="my-7 w-full">
         <img
-          src="/avatar.png" // replace with your avatar image path
+          src="/avatar.png"
           alt="User avatar"
           className="w-14 h-14 rounded-full mx-auto object-cover"
         />
-        <h1 className="mt-2 text-center font-semibold text-gray-700">Himanshu</h1>
+        {/* 👈 display username dynamically */}
+        <h1 className="mt-2 text-center font-semibold text-gray-700">
+          {username || "Loading..."}
+        </h1>
 
         {/* Navigation Links */}
         <div className="px-6 mt-6 text-sm font-medium text-gray-600 space-y-2">

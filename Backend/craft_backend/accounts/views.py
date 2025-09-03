@@ -7,6 +7,7 @@ from .serializers import RegisterSerializer,Roadmap_Generetor_formSerializer
 from django.contrib.auth.models import User
 from rest_framework.permissions import IsAuthenticated
 from .models import Student
+
 # Create your views here.
 
 #Register_view
@@ -19,7 +20,12 @@ class Register_view(APIView):
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 #Roadmap_genrator_form_views
 
-# views.py
+class UserName_View(APIView):
+    def get(self,request):
+        user = request.user
+        return Response({"username":user.username}, status=status.HTTP_200_OK)
+
+
 
 class RoadmapView(APIView):
     permission_classes = [IsAuthenticated]

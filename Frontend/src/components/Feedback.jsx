@@ -14,7 +14,7 @@ const Feedback = () => {
         },
         {
             image: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200",
-            name: 'Manish Talpda',
+            name: 'Manish Baman ',
             title: 'Web Developer',
             content: 'Good experience of my with this software and i have also a cheat code which is ********** Brother. It is valid only for me',
             rating: 5,
