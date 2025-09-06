@@ -1,7 +1,10 @@
 import google.generativeai as genai
 
-# configure with your API key
-genai.configure(api_key="AIzaSyB_aAXh-gDkwUokngkpqUL4cBJDcSgfgtU")
+import os
+import dotenv
+
+dotenv.load_dotenv()
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 def generate_roadmap(user_data):
     if not isinstance(user_data, dict):

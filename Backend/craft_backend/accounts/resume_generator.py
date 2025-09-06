@@ -22,8 +22,8 @@ import os
 import dotenv
 
 dotenv.load_dotenv()
-# genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-genai.configure(api_key="AIzaSyB_aAXh-gDkwUokngkpqUL4cBJDcSgfgtU")
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+# genai.configure(api_key="AIzaSyB_aAXh-gDkwUokngkpqUL4cBJDcSgfgtU")
 def generate_resume(user_data, roadmap):
     if not isinstance(user_data, dict):
         # Try to convert Django model instance to dict
