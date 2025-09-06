@@ -8,6 +8,8 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'), 
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('form/', views.RoadmapView.as_view(), name="form"),
+     path('form/',views.RoadmapView.as_view(),name="form"),
+    path('user/',views.UserName_View.as_view(), name="username"),
     path('generate_roadmap/', views.generate_roadmap_view, name='generate_roadmap'),
     path('generate_package/', views.generate_ai_package, name='generate_ai_package'),
 
