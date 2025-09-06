@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function ResumeBuilderForm() {
   const [resumedata, setResumedata] = useState({
@@ -15,46 +16,70 @@ function ResumeBuilderForm() {
     college: "",
     skill: "",
     interest: "",
+   
   });
+ 
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setResumedata({ ...resumedata, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const token = localStorage.getItem("access_token"); 
-      await axios.post(
-        "http://127.0.0.1:8000/api/form/",
-        {
-          name: resumedata.name,
-          dob: resumedata.dob,
-          email: resumedata.email,
-          phone: resumedata.phone,   // ✅ send phone
-          address: resumedata.address,
-          qualification: resumedata.lastQualification,
-          course: resumedata.currentCourse,
-          branch: resumedata.branch,
-          college: resumedata.college,
-          skill: resumedata.skill,
-          interest: resumedata.interest,
+  try {
+    const token = localStorage.getItem("access_token");
+
+    // 1️⃣ Save student form
+    const saveRes = await axios.post(
+      "http://127.0.0.1:8000/api/form/",
+      {
+        name: resumedata.name,
+        dob: resumedata.dob,
+        email: resumedata.email,
+        phone: resumedata.phone,
+        address: resumedata.address,
+        qualification: resumedata.lastQualification,
+        course: resumedata.currentCourse,
+        branch: resumedata.branch,
+        college: resumedata.college,
+        skill: resumedata.skill,
+        interest: resumedata.interest,
+      },
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
-        {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      }
+    );
 
-      alert("Resume data saved successfully!");
-    } catch (error) {
-      console.error("Error saving resume data:", error.response?.data || error.message);
-      alert("Failed to save resume data. Check console for details.");
-    }
-  };
+    const studentId = saveRes.data.id;
+
+    // 2️⃣ Generate only roadmap
+    const roadmapRes = await axios.post(
+      "http://127.0.0.1:8000/api/generate_roadmap/",
+      { student_id: studentId },
+      {
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // 3️⃣ Navigate with roadmap data
+    navigate("/ai/AIPackageResult", { state: roadmapRes.data });
+
+  } catch (error) {
+    console.error("Error:", error.response?.data || error.message);
+    alert("Failed to generate roadmap. Please check console.");
+  }
+};
+
+  // ...existing JSX...
+
 
   return (
     <div className="bg-gray-50 p-6 min-h-screen">

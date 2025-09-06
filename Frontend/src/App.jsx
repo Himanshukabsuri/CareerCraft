@@ -5,6 +5,7 @@ import Tools from './components/Tools'
 import Layout from './pages/Layout'
 import Dashboard from './pages/Dashboard'
 import ResumeBuilderForm from './pages/Resume_builderForm'
+import AIPackageResult from './pages/AIPackageResult'
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         <Route path='/ai' element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path='Resume-builder' element={<ResumeBuilderForm/>}/>
+          <Route path='AIPackageResult' element={<AIPackageResult/>}/>
 
           </Route>
         
