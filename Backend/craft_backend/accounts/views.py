@@ -56,7 +56,6 @@ def generate_roadmap_view(request):
         student = Student.objects.get(id=student_id, user=request.user)
         user_data = {
             "name": student.name,
-            "dob": str(student.dob),
             "email": student.email,
             "phone": student.phone,
             "address": student.address,

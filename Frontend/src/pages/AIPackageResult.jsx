@@ -54,9 +54,9 @@ function AIPackageResult() {
           </h2>
           <div className="grid md:grid-cols-2 gap-6 text-lg">
             <p><strong><User size={18} className="inline mr-2"/>Name:</strong> {user_data?.name || "N/A"}</p>
-            <p><strong><Mail size={18} className="inline mr-2"/>Email:</strong> {user_data?.email || "N/A"}</p>
+            {/* <p><strong><Mail size={18} className="inline mr-2"/>Email:</strong> {user_data?.email || "N/A"}</p> */}
             <p><strong><School size={18} className="inline mr-2"/>Course:</strong> {user_data?.course || "N/A"}</p>
-            <p><strong><Building2 size={18} className="inline mr-2"/>College:</strong> {user_data?.college || "N/A"}</p>
+            {/* <p><strong><Building2 size={18} className="inline mr-2"/>College:</strong> {user_data?.college || "N/A"}</p> */}
           </div>
         </section>
 

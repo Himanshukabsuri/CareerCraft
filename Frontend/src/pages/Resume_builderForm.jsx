@@ -85,7 +85,7 @@ function ResumeBuilderForm() {
     <div className="bg-gray-50 p-6 min-h-screen">
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Resume Builder</h3>
+          <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Roadmap Builder</h3>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Personal Details Column */}
@@ -104,7 +104,7 @@ function ResumeBuilderForm() {
                 />
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Address</label>
                 <input 
                   type="text" 
@@ -114,9 +114,9 @@ function ResumeBuilderForm() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                   placeholder="Enter your address"
                 />
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
                 <input 
                   type="date" 
@@ -125,9 +125,9 @@ function ResumeBuilderForm() {
                   onChange={handleChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                 />
-              </div>
+              </div> */}
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                 <input 
                   type="email" 
@@ -137,8 +137,8 @@ function ResumeBuilderForm() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                   placeholder="Enter your email"
                 />
-              </div>
-              <div>
+              </div> */}
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                 <input 
                   type="text" 
@@ -148,7 +148,7 @@ function ResumeBuilderForm() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                   placeholder="Enter your Phone"
                 />
-              </div>
+              </div> */}
             </div>
 
             {/* Education Column */}
@@ -225,7 +225,7 @@ function ResumeBuilderForm() {
                 </select>
               </div>
 
-              <div>
+              {/* <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">College</label>
                 <input 
                   type="text" 
@@ -235,7 +235,7 @@ function ResumeBuilderForm() {
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent text-sm"
                   placeholder="Enter your college name"
                 />
-              </div>
+              </div> */}
             </div>
 
             {/* Skills & Interests Column */}
@@ -272,7 +272,7 @@ function ResumeBuilderForm() {
                   onClick={handleSubmit} 
                   className="w-full bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white py-3 px-4 rounded-md hover:from-green-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 font-medium shadow-md"
                 >
-                  Build Resume
+                  Build Roadmap
                 </button>
               </div>
             </div>
