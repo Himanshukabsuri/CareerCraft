@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 const navItems = [
   { to: "/ai", label: "Dashboard", Icon: House },
-  { to: "/ai/Resume-builder", label: "Resume Builder", Icon: FileText },
+  { to: "/ai/Resume-builder", label: "Roadmap", Icon: FileText },
 ];
 
 const Sidebar = ({ sidebar, setSidebar }) => {
