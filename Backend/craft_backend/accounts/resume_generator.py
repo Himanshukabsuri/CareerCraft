@@ -45,7 +45,7 @@ from .pdf_utils import export_pdf  # to generate PDF
 dotenv.load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-def generate_resume(user_data, roadmap):
+def generate_resume(user_data):
     """
     user_data must be a dict structured like:
     {
@@ -57,7 +57,8 @@ def generate_resume(user_data, roadmap):
             "address": "New Delhi, India",
             "linkedin": "https://linkedin.com/in/john",
             "github": "https://github.com/john",
-            "portfolio": "https://john.dev"
+            "portfolio": "https://john.dev",
+            "interested_field": "Artificial Intelligence"   # ✅ NEW
         },
         "education": [
             {"level": "B.Tech", "course": "CSE", "college": "DIT", "year": "2025", "score": "8.2 CGPA"},
@@ -85,23 +86,28 @@ def generate_resume(user_data, roadmap):
 
     # Safety: allow model instances too
     if not isinstance(user_data, dict):
-        if hasattr(user_data, '__dict__'):
-            user_data = {k: v for k, v in user_data.__dict__.items() if not k.startswith('_')}
+        if hasattr(user_data, "__dict__"):
+            user_data = {k: v for k, v in user_data.__dict__.items() if not k.startswith("_")}
         else:
             raise TypeError("user_data must be a dictionary or have a __dict__ attribute")
+
+    # Extract interested field (fallback to skills or generic career goal)
+    personal = user_data.get("personal", {})
+    interested_field = personal.get("interested_field") or "Career Growth"
+    skills = user_data.get("skills", [])
 
     prompt = f"""
     You are an expert resume writer. Create a professional ATS-friendly resume
     in plain text format with the following details:
 
     PERSONAL DETAILS:
-    {user_data.get("personal")}
+    {personal}
 
     EDUCATION:
     {user_data.get("education")}
 
     SKILLS:
-    {user_data.get("skills")}
+    {skills}
 
     PROJECTS:
     {user_data.get("projects")}
@@ -109,12 +115,9 @@ def generate_resume(user_data, roadmap):
     LANGUAGES:
     {user_data.get("languages")}
 
-    CAREER ROADMAP:
-    {roadmap}
-
     Resume Format:
     1. Full Name + Contact (Email, Phone, LinkedIn, GitHub, Portfolio)
-    2. Objective (AI-generated, based on roadmap & user data)
+    2. Objective (AI-generated, based on Interested Field = {interested_field} and Skills = {skills})
     3. Education (reverse chronological order, clean layout)
     4. Skills (bullet points, ATS keywords)
     5. Projects (with GitHub/Live links if available)
@@ -130,10 +133,11 @@ def generate_resume(user_data, roadmap):
     resume_text = response.text.strip()
 
     # ✅ Save as PDF
-    pdf_filename = f"{user_data['personal']['name'].replace(' ', '_')}_resume.pdf"
+    pdf_filename = f"{personal.get('name', 'resume').replace(' ', '_')}_resume.pdf"
     pdf_path = export_pdf(resume_text, filename=pdf_filename)
 
     return {
         "resume": resume_text,
         "pdf_path": pdf_path
     }
+
