@@ -61,6 +61,17 @@ class Student(models.Model):
     def __str__(self):
         return self.name
 
+class Education(models.Model):
+    student = models.ForeignKey(Student, related_name="education", on_delete=models.CASCADE)
+    degree = models.CharField(max_length=100)
+    institution = models.CharField(max_length=200)
+    start_year = models.IntegerField(blank=True, null=True)
+    end_year = models.IntegerField(blank=True, null=True)
+    grade = models.CharField(max_length=20, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.degree} - {self.institution} ({self.student.name})"
+
 
 class Project(models.Model):
     student = models.ForeignKey(Student, related_name="projects", on_delete=models.CASCADE)

@@ -12,5 +12,8 @@ urlpatterns = [
     path('user/',views.UserName_View.as_view(), name="username"),
     path('generate_roadmap/', views.generate_roadmap_view, name='generate_roadmap'),
     path('generate_package/', views.generate_ai_package, name='generate_ai_package'),
+    path('resume/', views.ResumeView.as_view(), name="resume_form"), 
+    path('generate_resume/', views.generate_resume_view, name="generate_resume"),
+
 
 ]
