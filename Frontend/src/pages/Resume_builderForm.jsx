@@ -36,7 +36,7 @@ function ResumeBuilderForm() {
       "http://127.0.0.1:8000/api/form/",
       {
         name: resumedata.name,
-        dob: resumedata.dob,
+        // dob: resumedata.dob,
         email: resumedata.email,
         phone: resumedata.phone,
         address: resumedata.address,

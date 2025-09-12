@@ -73,12 +73,15 @@ class Education(models.Model):
         return f"{self.degree} - {self.institution} ({self.student.name})"
 
 class Internship(models.Model):
+    student = models.ForeignKey("Student", related_name="internships", on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
-    duration = models.DateField(max_length=100)
     company = models.CharField(max_length=100)
-    
+    duration = models.CharField(max_length=100)
+
     def __str__(self):
-        return self.name
+        return f"{self.title} at {self.company}"
+
+
     
 class Project(models.Model):
     student = models.ForeignKey(Student, related_name="projects", on_delete=models.CASCADE)
