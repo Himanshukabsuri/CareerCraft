@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Student, Education, Project, Language
+from .models import Student, Education, Project, Language, Internship
+
 
 # ------------------------------
 # Register Serializer
@@ -43,6 +44,12 @@ class EducationSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ["student"]  # we’ll assign student automatically
 
+class InternshipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Internship
+        fields = "__all__"
+        read_only_fields = ["student"]
+
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
@@ -60,14 +67,16 @@ class ResumeSerializer(serializers.ModelSerializer):
     education = EducationSerializer(many=True, required=False)
     projects = ProjectSerializer(many=True, required=False)
     languages = LanguageSerializer(many=True, required=False)
+    internships = InternshipSerializer(many=True, required=False)  # 👈 Added
 
     class Meta:
         model = Student
         fields = [
-            "id", "name", "email", "phone", "address", 
-            "qualification", "college", "course", "branch", 
-            "interest", "skill",
-            "education", "projects", "languages"
+            "id", "name", "dob", "email", "phone", "address",
+            "linkedin", "github", "portfolio",
+            "qualification", "college", "course", "branch",
+            "interested_field", "interest", "skill",
+            "education", "projects", "languages", "internships"
         ]
         read_only_fields = ["user"]
 
@@ -75,6 +84,7 @@ class ResumeSerializer(serializers.ModelSerializer):
         education_data = validated_data.pop("education", [])
         project_data = validated_data.pop("projects", [])
         language_data = validated_data.pop("languages", [])
+        internship_data = validated_data.pop("internships", [])  # 👈 Added
 
         student = Student.objects.create(**validated_data)
 
@@ -84,5 +94,8 @@ class ResumeSerializer(serializers.ModelSerializer):
             Project.objects.create(student=student, **proj)
         for lang in language_data:
             Language.objects.create(student=student, **lang)
+        for intern in internship_data:
+            Internship.objects.create(student=student, **intern)  # 👈 Added
 
         return student
+

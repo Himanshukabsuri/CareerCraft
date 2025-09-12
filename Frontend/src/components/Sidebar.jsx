@@ -5,7 +5,9 @@ import { NavLink } from "react-router-dom";
 const navItems = [
   { to: "/ai", label: "Dashboard", Icon: House },
   { to: "/ai/Resume-builder", label: "Roadmap", Icon: FileText },
+  { to: "/ai/resume-form", label: "Resume Form", Icon: FileText }, // 👈 new
 ];
+
 
 const Sidebar = ({ sidebar, setSidebar }) => {
   const [username, setUsername] = useState(""); // 👈 state for username
