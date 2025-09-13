@@ -42,10 +42,12 @@ const ResumeForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData)
     try {
       await axios.post("http://127.0.0.1:8000/api/resume/", formData, {
         headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
+
       alert("✅ Resume saved successfully!");
     } catch (error) {
       console.error(error);

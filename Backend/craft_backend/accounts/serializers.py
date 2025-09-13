@@ -48,7 +48,8 @@ class InternshipSerializer(serializers.ModelSerializer):
     class Meta:
         model = Internship
         fields = "__all__"
-        read_only_fields = ["student"]
+        read_only_fields = ["student"]  # ✅ but student FK is missing in model!
+
 
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:

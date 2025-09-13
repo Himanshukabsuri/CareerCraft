@@ -80,7 +80,9 @@ class Internship(models.Model):
     end_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.title} at {self.company}"
+
+
     
 class Project(models.Model):
     student = models.ForeignKey(Student, related_name="projects", on_delete=models.CASCADE)
