@@ -127,6 +127,10 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
+from django.conf import settings
+import os
+from .models import Student
+from .resume_generator import generate_resume
 
 # Import serializers and models
 from .serializers import (
@@ -241,10 +245,11 @@ class ResumeView(APIView):
 
 @api_view(['POST'])
 def generate_resume_view(request):
-    """Generate AI-powered resume + PDF"""
+    """Generate AI-powered resume + PDF (with internships)"""
     student_id = request.data.get("student_id")
     try:
         student = Student.objects.get(id=student_id, user=request.user)
+
         user_data = {
             "personal": {
                 "name": student.name,
@@ -252,31 +257,34 @@ def generate_resume_view(request):
                 "email": student.email,
                 "phone": student.phone,
                 "address": student.address,
-                "linkedin": "",  # extend later
-                "github": "",
-                "portfolio": "",
-                "interested_field": student.interest
+                "linkedin": student.linkedin if hasattr(student, "linkedin") else "",
+                "github": student.github if hasattr(student, "github") else "",
+                "portfolio": student.portfolio if hasattr(student, "portfolio") else "",
+                "interested_field": student.interest,
             },
             "education": list(student.education.values()),
             "skills": student.skill.split(",") if student.skill else [],
-            
             "projects": list(student.projects.values()),
-            "languages": list(student.languages.values_list("name", flat=True))
+            "languages": list(student.languages.values_list("name", flat=True)),
+
+            # ✅ Add internships
+            "internships": list(student.internships.values()) if student.internships.exists() else []
         }
 
         resume_data = generate_resume(user_data)
 
+        # ✅ Build absolute PDF URL
+        pdf_url = request.build_absolute_uri(settings.MEDIA_URL + resume_data["pdf_path"])
+
         return Response({
-            "resume": resume_data["resume"],
-            "pdf_path": resume_data["pdf_path"]
+            "resume_text": resume_data["resume"],
+            "pdf_url": pdf_url  # 👈 frontend can preview/download this
         }, status=status.HTTP_200_OK)
 
     except Student.DoesNotExist:
         return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
 # ------------------------------
 # Combined Package (Roadmap + Resume)
 # ------------------------------

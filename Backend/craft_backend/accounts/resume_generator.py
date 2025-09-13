@@ -58,7 +58,7 @@ def generate_resume(user_data):
             "linkedin": "https://linkedin.com/in/john",
             "github": "https://github.com/john",
             "portfolio": "https://john.dev",
-            "interested_field": "Artificial Intelligence"   # ✅ NEW
+            "interested_field": "Artificial Intelligence"
         },
         "education": [
             {"level": "B.Tech", "course": "CSE", "college": "DIT", "year": "2025", "score": "8.2 CGPA"},
@@ -80,6 +80,15 @@ def generate_resume(user_data):
                 "live": ""
             }
         ],
+        "internships": [
+            {
+                "title": "Software Engineering Intern",
+                "company": "ABC Pvt Ltd",
+                "start_date": "2024-06-01",
+                "end_date": "2024-08-30",
+                "description": "Worked on backend APIs using Django and PostgreSQL."
+            }
+        ],
         "languages": ["English", "Hindi"]
     }
     """
@@ -91,11 +100,16 @@ def generate_resume(user_data):
         else:
             raise TypeError("user_data must be a dictionary or have a __dict__ attribute")
 
-    # Extract interested field (fallback to skills or generic career goal)
+    # Extract fields
     personal = user_data.get("personal", {})
     interested_field = personal.get("interested_field") or "Career Growth"
     skills = user_data.get("skills", [])
+    education = user_data.get("education", [])
+    projects = user_data.get("projects", [])
+    internships = user_data.get("internships", [])  # ✅ NEW
+    languages = user_data.get("languages", [])
 
+    # Build prompt
     prompt = f"""
     You are an expert resume writer. Create a professional ATS-friendly resume
     in plain text format with the following details:
@@ -104,24 +118,28 @@ def generate_resume(user_data):
     {personal}
 
     EDUCATION:
-    {user_data.get("education")}
+    {education}
+
+    INTERNSHIPS:
+    {internships}
 
     SKILLS:
     {skills}
 
     PROJECTS:
-    {user_data.get("projects")}
+    {projects}
 
     LANGUAGES:
-    {user_data.get("languages")}
+    {languages}
 
     Resume Format:
     1. Full Name + Contact (Email, Phone, LinkedIn, GitHub, Portfolio)
     2. Objective (AI-generated, based on Interested Field = {interested_field} and Skills = {skills})
     3. Education (reverse chronological order, clean layout)
-    4. Skills (bullet points, ATS keywords)
-    5. Projects (with GitHub/Live links if available)
-    6. Languages
+    4. Internships (company, role, duration, responsibilities)
+    5. Skills (bullet points, ATS keywords)
+    6. Projects (with GitHub/Live links if available)
+    7. Languages
 
     Rules:
     - No extra commentary, output only resume text.
@@ -140,4 +158,3 @@ def generate_resume(user_data):
         "resume": resume_text,
         "pdf_path": pdf_path
     }
-
