@@ -24,7 +24,7 @@
 #         return self.name
 
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User 
 
 
 class Student(models.Model):
@@ -73,10 +73,12 @@ class Education(models.Model):
         return f"{self.degree} - {self.institution} ({self.student.name})"
 
 class Internship(models.Model):
-    title = models.CharField(max_length=100)
-    duration = models.DateField(max_length=100)
-    company = models.CharField(max_length=100)
-    
+    student = models.ForeignKey(Student, related_name="internships", on_delete=models.CASCADE, null=True, blank=True)
+    company = models.CharField(max_length=255)
+    role = models.CharField(max_length=255, null=True, blank=True, default="Not specified")
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+
     def __str__(self):
         return self.name
     

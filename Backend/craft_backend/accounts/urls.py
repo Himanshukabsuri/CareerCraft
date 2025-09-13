@@ -14,6 +14,6 @@ urlpatterns = [
     path('generate_package/', views.generate_ai_package, name='generate_ai_package'),
     path('resume/', views.ResumeView.as_view(), name="resume_form"), 
     path('generate_resume/', views.generate_resume_view, name="generate_resume"),
-
+    
 
 ]

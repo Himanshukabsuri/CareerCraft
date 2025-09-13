@@ -225,11 +225,11 @@ class ResumeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        """Save Student + Education + Projects + Languages"""
         serializer = ResumeSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(user=request.user)   # ✅ auto-link logged-in user
+            serializer.save(user=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)  # Log errors to Django console
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
@@ -259,6 +259,7 @@ def generate_resume_view(request):
             },
             "education": list(student.education.values()),
             "skills": student.skill.split(",") if student.skill else [],
+            
             "projects": list(student.projects.values()),
             "languages": list(student.languages.values_list("name", flat=True))
         }

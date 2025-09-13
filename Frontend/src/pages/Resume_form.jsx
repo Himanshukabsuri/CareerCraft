@@ -43,8 +43,8 @@ const ResumeForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://127.0.0.1:8000/resume/", formData, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      await axios.post("http://127.0.0.1:8000/api/resume/", formData, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` },
       });
       alert("✅ Resume saved successfully!");
     } catch (error) {
@@ -164,26 +164,74 @@ const ResumeForm = () => {
 
 
       {/* Internships */}
-      <motion.div className="bg-white p-6 rounded-xl shadow-md">
-        <h3 className="text-xl font-semibold text-indigo-600 mb-4">Internships / Experience</h3>
-        {formData.internships.map((exp, index) => (
-          <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <input type="text" placeholder="Title" value={exp.title}
-              onChange={(e) => handleNestedChange(e, index, "internships", "title")}
-              className="border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400" />
-            <input type="text" placeholder="Company" value={exp.company}
-              onChange={(e) => handleNestedChange(e, index, "internships", "company")}
-              className="border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400" />
-            <input type="text" placeholder="Duration" value={exp.duration}
-              onChange={(e) => handleNestedChange(e, index, "internships", "duration")}
-              className="border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400" />
-          </div>
-        ))}
-        <button type="button" onClick={() => addField("internships", { title: "", company: "", duration: "" })}
-          className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600">
-          <PlusCircle size={18} /> Add Internship
-        </button>
-      </motion.div>
+<motion.div className="bg-white p-6 rounded-xl shadow-md">
+  <h3 className="text-xl font-semibold text-indigo-600 mb-4">
+    Internships / Experience
+  </h3>
+
+  {formData.internships.map((exp, index) => (
+    <div
+      key={index}
+      className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4"
+    >
+      <input
+        type="text"
+        placeholder="Title"
+        value={exp.title}
+        onChange={(e) =>
+          handleNestedChange(e, index, "internships", "title")
+        }
+        className="border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400"
+      />
+
+      <input
+        type="text"
+        placeholder="Company"
+        value={exp.company}
+        onChange={(e) =>
+          handleNestedChange(e, index, "internships", "company")
+        }
+        className="border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400"
+      />
+
+      <input
+        type="date"
+        placeholder="Start Date"
+        value={exp.start_date}
+        onChange={(e) =>
+          handleNestedChange(e, index, "internships", "start_date")
+        }
+        className="border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400"
+      />
+
+      <input
+        type="date"
+        placeholder="End Date"
+        value={exp.end_date}
+        onChange={(e) =>
+          handleNestedChange(e, index, "internships", "end_date")
+        }
+        className="border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400"
+      />
+    </div>
+  ))}
+
+  <button
+    type="button"
+    onClick={() =>
+      addField("internships", {
+        title: "",
+        company: "",
+        start_date: "",
+        end_date: "",
+      })
+    }
+    className="flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+  >
+    <PlusCircle size={18} /> Add Internship
+  </button>
+</motion.div>
+
 
       {/* Projects */}
       <motion.div className="bg-white p-6 rounded-xl shadow-md">
