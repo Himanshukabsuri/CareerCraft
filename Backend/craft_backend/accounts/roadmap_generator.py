@@ -1,10 +1,6 @@
 import google.generativeai as genai
 
 import os
-import dotenv
-
-dotenv.load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 def generate_roadmap(user_data):
     if not isinstance(user_data, dict):
@@ -41,6 +37,6 @@ def generate_roadmap(user_data):
     """
 
     # ✅ use a supported model
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.5-flash")
     response = model.generate_content(prompt)
     return response.text

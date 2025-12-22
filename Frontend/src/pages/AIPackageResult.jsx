@@ -86,7 +86,7 @@ function AIPackageResult() {
                 <div key={i} className="relative">
                   {/* timeline dot */}
                   <span className="absolute -left-7 top-1 w-6 h-6 rounded-full bg-blue-500 border-4 border-white"></span>
-                  <p className="text-lg text-gray-800">{goal}</p>
+                  <p className="text-lg text-gray-800">{typeof goal === "string"? goal: `${goal.name}: ${goal.description}`}</p>
                 </div>
               )) || <p>No goals available</p>}
             </div>
@@ -98,7 +98,7 @@ function AIPackageResult() {
           <div className="flex flex-wrap gap-4">
             {roadmap.skills_to_learn?.map((skill, i) => (
               <span key={i} className="px-4 py-2 bg-purple-100 text-purple-700 rounded-xl shadow hover:scale-105 transition">
-                {skill}
+                {typeof skill === "string"? skill: skill.name || JSON.stringify(skill)}
               </span>
             )) || <p>No skills listed</p>}
           </div>
@@ -112,7 +112,8 @@ function AIPackageResult() {
               <div key={i} className="p-8 rounded-3xl bg-gradient-to-br from-white to-gray-50 shadow hover:shadow-xl border border-gray-100">
                 <span className="px-3 py-1 text-sm rounded-full bg-indigo-100 text-indigo-700">{level}</span>
                 <ul className="mt-4 space-y-2 text-lg">
-                  {roadmap.projects?.[level]?.map((p, idx) => <li key={idx}>💡 {p}</li>) || <li>No projects</li>}
+                  {roadmap.projects?.[level]?.map((p, idx) => <li key={idx}>💡 {typeof p === "string" ? (p) : (<><strong>{p.name}</strong><p className="text-sm text-gray-600">{p.description}</p></>)}
+</li>) || <li>No projects</li>}
                 </ul>
               </div>
             ))}

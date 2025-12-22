@@ -38,12 +38,11 @@
 #     return response.text
 
 import google.generativeai as genai
+from django.conf import settings
 import os
-import dotenv
 from .pdf_utils import export_pdf  # to generate PDF
 
-dotenv.load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+genai.configure(api_key=settings.GEMINI_API_KEY)
 
 def generate_resume(user_data):
     """
@@ -146,13 +145,14 @@ def generate_resume(user_data):
     - Keep formatting ATS-friendly (simple, plain text, consistent headers).
     """
 
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.5-flash")
     response = model.generate_content(prompt)
     resume_text = response.text.strip()
 
     # ✅ Save as PDF
     pdf_filename = f"{personal.get('name', 'resume').replace(' ', '_')}_resume.pdf"
-    pdf_path = export_pdf(resume_text, filename=pdf_filename)
+    # pdf_path = export_pdf(resume_text, filename=pdf_filename)
+    pdf_path = ""
 
     return {
         "resume": resume_text,

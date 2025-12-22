@@ -44,41 +44,39 @@ const ResumeForm = () => {
   const addField = (field, newObj) => {
     setFormData({ ...formData, [field]: [...formData[field], newObj] });
   };
+const studentId = saveRes.data.id;
+localStorage.setItem("student_id", String(studentId));
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      // 1️⃣ Save the resume data
-      const saveRes = await axios.post(
-        "http://127.0.0.1:8000/api/resume/",
-        formData,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
+  e.preventDefault();
 
-      const studentId = saveRes.data.id;
+  try {
+    const studentId = localStorage.getItem("student_id");
 
-      // 2️⃣ Generate the resume PDF
-      const genRes = await axios.post(
-        "http://127.0.0.1:8000/api/generate_resume/",
-        { student_id: studentId },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-
-      setPdfUrl(genRes.data.pdf_url);
-      alert("✅ Resume generated successfully!");
-    } catch (error) {
-      console.error(error);
-      alert("❌ Error generating resume!");
+    if (!studentId) {
+      alert("Student ID not found. Please submit the form first.");
+      return;
     }
-  };
+
+    const genRes = await axios.post(
+      "http://127.0.0.1:8000/api/generate_resume/",
+      { student_id: studentId },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("Resume generated:", genRes.data);
+    alert("Resume generated successfully!");
+
+  } catch (error) {
+    console.error("Resume generation error:", error.response?.data);
+    alert("Failed to generate resume. Check console.");
+  }
+};
 
   return (
     <>

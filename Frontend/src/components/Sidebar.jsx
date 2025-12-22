@@ -13,21 +13,42 @@ const Sidebar = ({ sidebar, setSidebar }) => {
   const [username, setUsername] = useState(""); // 👈 state for username
 
   useEffect(() => {
-    // API call to fetch logged-in user's username
-    fetch("http://localhost:8000/api/user/", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + localStorage.getItem("access_token"), // JWT token
-      },
+  const token = localStorage.getItem("access_token");
+
+  if (!token) {
+    console.warn("No access token found. Skipping user fetch.");
+    return;
+  }
+
+  fetch("http://localhost:8000/api/user/", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => {
+      if (res.status === 401) {
+        // Token expired or invalid
+        localStorage.clear();
+        window.location.href = "/login";
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch user: " + res.status);
+      }
+
+      return res.json();
     })
-      .then((res) => {
-        if (!res.ok) throw new Error("Failed to fetch user: " + res.status);
-        return res.json();
-      })
-      .then((data) => setUsername(data.username)) // 👈 set username from API
-      .catch((err) => console.error("Error fetching username:", err));
-  }, []);
+    .then((data) => {
+      if (data?.username) {
+        setUsername(data.username);
+      }
+    })
+    .catch((err) => console.error("Error fetching username:", err));
+}, []);
+
 
   return (
     <div
