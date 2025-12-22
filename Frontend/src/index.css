@@ -1,6 +1,23 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 @import "tailwindcss";
 
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  @apply bg-white text-black transition-colors duration-300;
+}
+
+html.dark body {
+  @apply bg-gray-950 text-white;
+}
+
+
 *{
   font-family: "Outfit", sans-serif;
 }
@@ -8,9 +25,7 @@
 @theme{
   --color-primary:#5044E5
 }
-.reset-tw,.reset-tw *{
-  all:revert !important
-}
+
 
 .cl-drawerRoot{
   z-index: 10;

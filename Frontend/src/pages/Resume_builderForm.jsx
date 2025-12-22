@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Navbar from '../components/Navbar'
+
 
 function ResumeBuilderForm() {
   const [resumedata, setResumedata] = useState({
@@ -83,6 +85,7 @@ function ResumeBuilderForm() {
 
   return (
     <div className="bg-gray-50 p-6 min-h-screen">
+      <Navbar/>
       <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Roadmap Builder</h3>

@@ -1,8 +1,11 @@
 import React from "react";
+import Navbar from '../components/Navbar'
 
 const Plans = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center p-6 md:p-12">
+    <>
+    <Navbar/>
+  <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center p-6 md:p-12">
       <div className="grid md:grid-cols-2 gap-8 max-w-6xl w-full">
         {/* Free Plan */}
         <div className="bg-white rounded-2xl shadow-xl p-8 flex flex-col items-center transform hover:scale-105 transition-transform duration-300">
@@ -51,6 +54,8 @@ const Plans = () => {
         </div>
       </div>
     </div>
+    </>
+    
   );
 };
 
