@@ -47,49 +47,46 @@ const ResumeForm = () => {
   };
 
   // ================= SUBMIT =================
- const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  try {
-    // 1️⃣ SAVE RESUME DATA
-    const saveRes = await axios.post(
-      "http://127.0.0.1:8000/api/resume/",
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    try {
+      // 1️⃣ SAVE RESUME DATA
+      const saveRes = await axios.post(
+        "http://127.0.0.1:8000/api/resume/",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    const studentId = saveRes.data.id;
-    localStorage.setItem("student_id", studentId);
+      const studentId = saveRes.data.id;
+      localStorage.setItem("student_id", studentId);
 
-    // 2️⃣ GENERATE RESUME PDF
-    const genRes = await axios.post(
-      "http://127.0.0.1:8000/api/generate_resume/",
-      { student_id: studentId },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      // 2️⃣ GENERATE RESUME PDF
+      const genRes = await axios.post(
+        "http://127.0.0.1:8000/api/generate_resume/",
+        { student_id: studentId },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    // 3️⃣ SHOW PDF
-    setPdfUrl(
-      "http://127.0.0.1:8000/media/" + genRes.data.pdf_path
-    );
+      // 3️⃣ SHOW PDF
+      setPdfUrl(genRes.data.pdf_url);
 
-    alert("Resume generated successfully!");
-
-  } catch (error) {
-    console.error("ERROR:", error.response?.data || error.message);
-    alert("Failed to generate resume");
-  }
-};
+      alert("Resume generated successfully!");
+    } catch (error) {
+      console.error("ERROR:", error.response?.data || error.message);
+      alert("Failed to generate resume");
+    }
+  };
 
   return (
     <>
@@ -105,7 +102,7 @@ const ResumeForm = () => {
           🚀 Resume Builder
         </h2>
 
-       {/* Personal Info */}
+        {/* Personal Info */}
         <motion.div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">
             Personal Info
@@ -465,7 +462,7 @@ const ResumeForm = () => {
           </button>
         </div>
 
-        {pdfUrl && (
+        {/* {pdfUrl && (
           <div className="mt-8 text-center">
             <h3 className="text-xl font-semibold text-indigo-600 mb-4">
               Your Generated Resume
@@ -480,6 +477,41 @@ const ResumeForm = () => {
                 href={pdfUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+              >
+                📥 Download PDF
+              </a>
+            </div>
+          </div>
+        )} */}
+        {pdfUrl && (
+          <div className="mt-8 text-center">
+            <h3 className="text-xl font-semibold text-indigo-600 mb-4">
+              Your Generated Resume
+            </h3>
+
+            {/* ✅ BEST FOR PDF PREVIEW */}
+            {/* <embed
+              src={pdfUrl}
+              type="application/pdf"
+              width="100%"
+              height="600px"
+              className="border rounded-xl shadow-md"
+            /> */}
+
+            <div className="mt-4 flex justify-center gap-4">
+              <a
+                href={pdfUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+              >
+                🔍 View in New Tab
+              </a>
+
+              <a
+                href={pdfUrl}
+                download
                 className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
               >
                 📥 Download PDF

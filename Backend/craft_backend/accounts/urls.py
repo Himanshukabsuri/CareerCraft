@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from .views import generate_ai_package
+# from django.conf import settings
+# from django.conf.urls.static import static
+
 
 urlpatterns = [
     path('register/', views.Register_view.as_view(), name="register"),
@@ -13,6 +16,8 @@ urlpatterns = [
     path('generate_package/', views.generate_ai_package, name='generate_ai_package'),
     path('resume/', views.ResumeView.as_view(), name="resume_form"), 
     path('generate_resume/', views.generate_resume_view, name="generate_resume"),
-    
 
 ]
+
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

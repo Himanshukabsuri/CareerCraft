@@ -332,12 +332,15 @@ def generate_resume_view(request):
         print("RESUME GENERATED")
 
         return Response(
-            {
-                "resume_text": resume_data["resume"],
-                "pdf_path": resume_data.get("pdf_path", ""),
-            },
-            status=status.HTTP_200_OK
-        )
+        {
+            "resume_text": resume_data["resume"],
+            "pdf_path": resume_data["pdf_path"],   
+            "pdf_url": request.build_absolute_uri(
+                settings.MEDIA_URL + resume_data["pdf_path"]
+            )
+        },
+        status=status.HTTP_200_OK
+    )
 
     except Exception as e:
         print("🔥 RESUME GENERATION ERROR 🔥")

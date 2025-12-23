@@ -151,10 +151,10 @@ def generate_resume(user_data):
 
     # ✅ Save as PDF
     pdf_filename = f"{personal.get('name', 'resume').replace(' ', '_')}_resume.pdf"
-    # pdf_path = export_pdf(resume_text, filename=pdf_filename)
-    pdf_path = ""
+
+    pdf_path = export_pdf(resume_text, filename=pdf_filename)
 
     return {
         "resume": resume_text,
         "pdf_path": pdf_path
-    }
+}
