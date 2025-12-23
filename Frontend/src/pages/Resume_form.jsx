@@ -29,8 +29,9 @@ const ResumeForm = () => {
     languages: [{ name: "" }],
   });
 
-  const [pdfUrl, setPdfUrl] = useState(null); // 👈 PDF link
+  const [pdfUrl, setPdfUrl] = useState(null);
 
+  // ================= HANDLERS =================
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -44,20 +45,28 @@ const ResumeForm = () => {
   const addField = (field, newObj) => {
     setFormData({ ...formData, [field]: [...formData[field], newObj] });
   };
-const studentId = saveRes.data.id;
-localStorage.setItem("student_id", String(studentId));
 
-  const handleSubmit = async (e) => {
+  // ================= SUBMIT =================
+ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const studentId = localStorage.getItem("student_id");
+    // 1️⃣ SAVE RESUME DATA
+    const saveRes = await axios.post(
+      "http://127.0.0.1:8000/api/resume/",
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    if (!studentId) {
-      alert("Student ID not found. Please submit the form first.");
-      return;
-    }
+    const studentId = saveRes.data.id;
+    localStorage.setItem("student_id", studentId);
 
+    // 2️⃣ GENERATE RESUME PDF
     const genRes = await axios.post(
       "http://127.0.0.1:8000/api/generate_resume/",
       { student_id: studentId },
@@ -69,18 +78,23 @@ localStorage.setItem("student_id", String(studentId));
       }
     );
 
-    console.log("Resume generated:", genRes.data);
+    // 3️⃣ SHOW PDF
+    setPdfUrl(
+      "http://127.0.0.1:8000/media/" + genRes.data.pdf_path
+    );
+
     alert("Resume generated successfully!");
 
   } catch (error) {
-    console.error("Resume generation error:", error.response?.data);
-    alert("Failed to generate resume. Check console.");
+    console.error("ERROR:", error.response?.data || error.message);
+    alert("Failed to generate resume");
   }
 };
 
   return (
     <>
       <Navbar />
+
       <motion.form
         onSubmit={handleSubmit}
         className="max-w-5xl mx-auto bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl p-8 rounded-2xl space-y-10"
@@ -91,7 +105,7 @@ localStorage.setItem("student_id", String(studentId));
           🚀 Resume Builder
         </h2>
 
-        {/* Personal Info */}
+       {/* Personal Info */}
         <motion.div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">
             Personal Info
@@ -451,7 +465,6 @@ localStorage.setItem("student_id", String(studentId));
           </button>
         </div>
 
-        {/* Show PDF after generation */}
         {pdfUrl && (
           <div className="mt-8 text-center">
             <h3 className="text-xl font-semibold text-indigo-600 mb-4">
@@ -461,7 +474,7 @@ localStorage.setItem("student_id", String(studentId));
               src={pdfUrl}
               title="Generated Resume"
               className="w-full h-[600px] border rounded-xl shadow-md"
-            ></iframe>
+            />
             <div className="mt-4">
               <a
                 href={pdfUrl}
