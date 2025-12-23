@@ -101,3 +101,28 @@ class Language(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.student.name}"
+
+
+# models.py
+
+class ResumeHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    resume_text = models.TextField()
+    pdf_file = models.FileField(upload_to="resumes/")
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Resume - {self.student.name} ({self.created_at.date()})"
+class RoadmapHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+
+    roadmap_json = models.JSONField()
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Roadmap - {self.student.name} ({self.created_at.date()})"

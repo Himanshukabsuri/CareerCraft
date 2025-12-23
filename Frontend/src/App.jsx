@@ -7,19 +7,25 @@ import Dashboard from './pages/Dashboard'
 import ResumeBuilderForm from './pages/Resume_builderForm'
 import ResumeForm from './pages/Resume_form'
 import AIPackageResult from './pages/AIPackageResult'
-
+import RoadmapHistory from './pages/RoadmapHistory'
+import ResumeHistory from './pages/ResumeHistory'
 const App = () => {
   return (
     <div>
       <Routes>
         <Route path='/' element={<Home />} />
+        
         <Route path='/tools' element={<Tools />} />
         <Route path='/ai' element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path='Resume-builder' element={<ResumeBuilderForm/>}/>
-          <Route path='/ai/resume-form' element={<ResumeForm />} />
+          
 
+          <Route path='/ai/resume-form' element={<ResumeForm />} />
+          <Route path='/ai//roadmap-history' element={<RoadmapHistory/>}/>
+          <Route path="/ai/resume-history" element={<ResumeHistory />} />
           <Route path='AIPackageResult' element={<AIPackageResult/>}/>
+          
 
           </Route>
         

@@ -6,6 +6,8 @@ const navItems = [
   { to: "/ai", label: "Dashboard", Icon: House },
   { to: "/ai/Resume-builder", label: "Roadmap", Icon: FileText },
   { to: "/ai/resume-form", label: "Resume Form", Icon: FileText }, // 👈 new
+  { to: "/ai/roadmap-history",label:"Roadmap History",Icon: FileText},
+  { to: "/ai/resume-history",label:"Resume History",Icon: FileText}
 ];
 
 

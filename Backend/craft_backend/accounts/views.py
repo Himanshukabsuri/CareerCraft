@@ -138,7 +138,7 @@ from .serializers import (
     Roadmap_Generetor_formSerializer,
     ResumeSerializer
 )
-from .models import Student, Education, Project, Language
+from .models import Student, Education, Project, Language,ResumeHistory,RoadmapHistory
 
 # Import services
 from .service import generate_ai_roadmap
@@ -212,7 +212,11 @@ def generate_roadmap_view(request):
             roadmap_data = json.loads(cleaned)
         except Exception:
             roadmap_data = {"raw_text": roadmap_text}  # fallback
-
+        roadmap_history = RoadmapHistory.objects.create(
+            user=request.user,
+            student=student,
+            roadmap_json=roadmap_data
+        )
         return Response({
             "user_data": user_data,
             "roadmap": roadmap_data
@@ -328,6 +332,12 @@ def generate_resume_view(request):
         print("USER DATA READY")
 
         resume_data = generate_resume(user_data)
+        resume_history = ResumeHistory.objects.create(
+                user=request.user,
+                student=student,
+                resume_text=resume_data["resume"],
+                pdf_file=resume_data["pdf_path"]
+            )
 
         print("RESUME GENERATED")
 
@@ -397,3 +407,62 @@ def generate_ai_package(request):
         return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from django.conf import settings
+
+from .models import ResumeHistory
+
+
+class ResumeHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        resumes = ResumeHistory.objects.filter(
+            user=request.user
+        ).select_related("student").order_by("-created_at")
+
+        data = []
+
+        for resume in resumes:
+            data.append({
+                "id": resume.id,
+                "student_name": resume.student.name,
+                "created_at": resume.created_at,
+                "pdf_url": request.build_absolute_uri(
+                    settings.MEDIA_URL + resume.pdf_file.name
+                ),
+                "resume_preview": resume.resume_text[:300] + "..."
+            })
+            # print(data)
+
+        return Response({
+            "count": len(data),
+            "resumes": data
+        })
+from .models import RoadmapHistory
+
+
+class RoadmapHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        roadmaps = RoadmapHistory.objects.filter(
+            user=request.user
+        ).select_related("student").order_by("-created_at")
+
+        data = []
+
+        for roadmap in roadmaps:
+            data.append({
+                "id": roadmap.id,
+                "student_name": roadmap.student.name,
+                "created_at": roadmap.created_at,
+                "roadmap": roadmap.roadmap_json
+            })
+        # print(data)
+        return Response({
+            "count": len(data),
+            "roadmaps": data
+        })
