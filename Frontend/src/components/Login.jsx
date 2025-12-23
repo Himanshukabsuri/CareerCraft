@@ -55,7 +55,7 @@ const LoginPopup = ({ open: controlledOpen, onClose }) => {
         const res = await axios.post(`${API_URL}/token/`, { username, password });
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
-        navigate("/tools");
+        navigate("/ai");
         requestClose(); // close after successful login
       }
       setUsername("");
