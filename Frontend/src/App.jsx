@@ -9,11 +9,13 @@ import ResumeForm from './pages/Resume_form'
 import AIPackageResult from './pages/AIPackageResult'
 import RoadmapHistory from './pages/RoadmapHistory'
 import ResumeHistory from './pages/ResumeHistory'
+import Login from './components/Login'
 const App = () => {
   return (
     <div>
       <Routes>
         <Route path='/' element={<Home />} />
+        <Route path='/login' element={<Login/>} />
         
         <Route path='/tools' element={<Tools />} />
         <Route path='/ai' element={<Layout />}>
