@@ -17,12 +17,10 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login/>} />
         
-        <Route path='/tools' element={<Tools />} />
-        <Route path='/ai' element={<Layout />}>
+          <Route path='/tools' element={<Tools />} />
+          <Route path='/ai' element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path='Resume-builder' element={<ResumeBuilderForm/>}/>
-          
-
           <Route path='/ai/resume-form' element={<ResumeForm />} />
           <Route path='/ai//roadmap-history' element={<RoadmapHistory/>}/>
           <Route path="/ai/resume-history" element={<ResumeHistory />} />

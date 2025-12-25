@@ -64,9 +64,9 @@ const Dashboard = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar/>
 
-      <div className="min-h-screen p-6 bg-[#F2F7FB]">
+      <div className="min-h-screen p-6 bg-[#F2F7FB] ">
         {/* ===== Count Cards ===== */}
         <div className="flex gap-4 mb-8 flex-wrap">
           {/* Resume Count */}

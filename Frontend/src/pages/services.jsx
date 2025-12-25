@@ -6,7 +6,6 @@ const services = () => {
   return (
     <div>
       <Navbar/>
-
     </div>
   )
 }

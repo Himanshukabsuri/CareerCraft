@@ -31,6 +31,8 @@ const ResumeForm = () => {
 
   const [pdfUrl, setPdfUrl] = useState(null);
 
+  const [loading, setLoading] = useState(false)
+
   // ================= HANDLERS =================
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -49,6 +51,7 @@ const ResumeForm = () => {
   // ================= SUBMIT =================
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     try {
       // 1️⃣ SAVE RESUME DATA
@@ -62,6 +65,7 @@ const ResumeForm = () => {
           },
         }
       );
+      setLoading(true)
 
       const studentId = saveRes.data.id;
       localStorage.setItem("student_id", studentId);
@@ -92,7 +96,7 @@ const ResumeForm = () => {
     <>
       <Navbar />
 
-      <motion.form
+      <form
         onSubmit={handleSubmit}
         className="max-w-5xl mx-auto bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl p-8 rounded-2xl space-y-10"
         initial={{ opacity: 0, y: 30 }}
@@ -103,7 +107,7 @@ const ResumeForm = () => {
         </h2>
 
         {/* Personal Info */}
-        <motion.div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">
             Personal Info
           </h3>
@@ -148,10 +152,10 @@ const ResumeForm = () => {
             onChange={handleChange}
             className="border p-3 rounded-lg w-full mt-3 focus:ring-2 focus:ring-indigo-400"
           />
-        </motion.div>
+        </div>
 
         {/* Online Profiles */}
-        <motion.div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">
             Online Profiles
           </h3>
@@ -181,10 +185,10 @@ const ResumeForm = () => {
               className="border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400"
             />
           </div>
-        </motion.div>
+        </div>
 
         {/* Education */}
-        <motion.div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">
             Education
           </h3>
@@ -246,10 +250,10 @@ const ResumeForm = () => {
           >
             <PlusCircle size={18} /> Add Education
           </button>
-        </motion.div>
+        </div>
 
         {/* Skills */}
-        <motion.div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">Skills</h3>
           <div className="flex gap-2 mb-3 flex-wrap">
             {formData.skill
@@ -295,10 +299,10 @@ const ResumeForm = () => {
             }}
             className="w-full border p-3 rounded-lg focus:ring-2 focus:ring-indigo-400"
           />
-        </motion.div>
+        </div>
 
         {/* Internships */}
-        <motion.div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">
             Internships / Experience
           </h3>
@@ -364,10 +368,10 @@ const ResumeForm = () => {
           >
             <PlusCircle size={18} /> Add Internship
           </button>
-        </motion.div>
+        </div>
 
         {/* Projects */}
-        <motion.div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">
             Projects
           </h3>
@@ -424,10 +428,10 @@ const ResumeForm = () => {
           >
             <PlusCircle size={18} /> Add Project
           </button>
-        </motion.div>
+          </div>
 
         {/* Languages */}
-        <motion.div className="bg-white p-6 rounded-xl shadow-md">
+        <div className="bg-white p-6 rounded-xl shadow-md">
           <h3 className="text-xl font-semibold text-indigo-600 mb-4">
             Languages
           </h3>
@@ -450,7 +454,7 @@ const ResumeForm = () => {
           >
             <PlusCircle size={18} /> Add Language
           </button>
-        </motion.div>
+        </div>
 
         {/* Submit */}
         <div className="text-center">
@@ -519,7 +523,7 @@ const ResumeForm = () => {
             </div>
           </div>
         )}
-      </motion.form>
+      </form>
     </>
   );
 };

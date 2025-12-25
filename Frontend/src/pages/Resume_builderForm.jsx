@@ -84,9 +84,9 @@ function ResumeBuilderForm() {
 
 
   return (
-    <div className="bg-gray-50 p-6 min-h-screen">
+    < >
       <Navbar/>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto ml-30 p-5 min-h-screen">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-2xl font-bold text-center mb-6 text-gray-800">Roadmap Builder</h3>
           
@@ -282,7 +282,7 @@ function ResumeBuilderForm() {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

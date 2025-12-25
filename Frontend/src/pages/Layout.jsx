@@ -11,13 +11,13 @@ const Layout = () => {
   return (
     <div className="flex flex-col h-screen">
       {/* Navbar */}
-      <nav className="w-full h-30 px-8 h-14 flex items-center justify-between border-b border-gray-200 bg-white">
-        <img
+      <nav className="w-full px-8 h-4 flex items-center justify-between border-b border-gray-200 bg-white">
+        {/* <img
           src={logo} // replace with your logo path
           alt="Logo"
           className="cursor-pointer w-32 sm:w-44 object-contain"
           onClick={() => navigate("/")}
-        />
+        /> */}
 
         {/* Mobile menu toggle */}
         <button className="sm:hidden">
@@ -36,12 +36,12 @@ const Layout = () => {
       </nav>
 
       {/* Main Content */}
-      <div className="flex flex-1 w-full">
+      <div className="flex flex-1 w-full ">
         {/* Sidebar */}
         <Sidebar sidebar={sidebar} setSidebar={setSidebar} />
 
         {/* Page Content */}
-        <main className="flex-1 bg-[#F2F7FB] p-4 overflow-y-auto">
+        <main className="flex-1 bg-[#F2F7FB] p-4 overflow-y-auto pt-20">
           <Outlet />
         </main>
       </div>
