@@ -3,6 +3,8 @@ import axios from "axios";
 import { motion } from "framer-motion";
 import { PlusCircle } from "lucide-react";
 import Navbar from "../components/Navbar";
+import Loader from "../components/Loading";
+
 
 const ResumeForm = () => {
   const [formData, setFormData] = useState({
@@ -65,7 +67,7 @@ const ResumeForm = () => {
           },
         }
       );
-      setLoading(true)
+      
 
       const studentId = saveRes.data.id;
       localStorage.setItem("student_id", studentId);
@@ -89,12 +91,16 @@ const ResumeForm = () => {
     } catch (error) {
       console.error("ERROR:", error.response?.data || error.message);
       alert("Failed to generate resume");
+    } finally{
+      setLoading(false)
     }
   };
 
   return (
     <>
       <Navbar />
+
+      {loading && <Loader />} 
 
       <form
         onSubmit={handleSubmit}
