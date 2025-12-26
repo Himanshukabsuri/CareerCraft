@@ -1,10 +1,8 @@
 from django.urls import path
 from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from .views import generate_ai_package
-# from django.conf import settings
-# from django.conf.urls.static import static
-from .views import ResumeHistoryView, RoadmapHistoryView
+
+from .views import ResumeHistoryView, RoadmapHistoryView,generate_ai_package,ContactUsView
 
 urlpatterns = [
     path('register/', views.Register_view.as_view(), name="register"),
@@ -18,8 +16,7 @@ urlpatterns = [
     path('generate_resume/', views.generate_resume_view, name="generate_resume"),
     path("resume/history/", ResumeHistoryView.as_view(), name="resume-history"),
     path("roadmap/history/", RoadmapHistoryView.as_view(), name="roadmap-history"),
+    path('contactus/',ContactUsView.as_view(),name="contact-us")
 
 ]
 
-# if settings.DEBUG:
-#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

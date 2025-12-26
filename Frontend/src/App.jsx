@@ -10,13 +10,14 @@ import AIPackageResult from './pages/AIPackageResult'
 import RoadmapHistory from './pages/RoadmapHistory'
 import ResumeHistory from './pages/ResumeHistory'
 import Login from './components/Login'
+import Contact from './pages/Contact'
 const App = () => {
   return (
     <div>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login/>} />
-        
+         <Route path='/contact' element={<Contact/>}/>
           <Route path='/tools' element={<Tools />} />
           <Route path='/ai' element={<Layout />}>
           <Route index element={<Dashboard />} />
@@ -26,7 +27,7 @@ const App = () => {
           <Route path="/ai/resume-history" element={<ResumeHistory />} />
           <Route path='AIPackageResult' element={<AIPackageResult/>}/>
           
-
+       
           </Route>
         
         

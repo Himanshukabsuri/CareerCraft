@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Student, Education, Project, Language, Internship
+from .models import Student, Education, Project, Language, Internship,ContactUs
 
 
 # ------------------------------
@@ -100,3 +100,9 @@ class ResumeSerializer(serializers.ModelSerializer):
 
         return student
 
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactUs
+        fields = "__all__"
+        read_only_fields = ["created_at"]

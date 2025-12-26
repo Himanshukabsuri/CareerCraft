@@ -1,125 +1,3 @@
-# from django.shortcuts import render
-# from rest_framework.response import Response
-# from rest_framework.views import APIView
-# from rest_framework import status
-# from rest_framework.decorators import api_view
-# from rest_framework.permissions import IsAuthenticated
-# from django.contrib.auth.models import User
-
-# # Import serializers and models
-# from .serializers import RegisterSerializer, Roadmap_Generetor_formSerializer
-# from .models import Student
-
-# # Import services
-# from .service import generate_ai_roadmap, generate_ai_resume
-
-
-# # Register View
-# class Register_view(APIView):
-#     def post(self, request):
-#         serializer = RegisterSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-# class UserName_View(APIView):
-#     def get(self,request):
-#         user = request.user
-#         return Response({"username":user.username}, status=status.HTTP_200_OK)
-
-# # Roadmap form view (save student form data)
-# class RoadmapView(APIView):
-#     permission_classes = [IsAuthenticated]
-
-#     def post(self, request):
-#         serializer = Roadmap_Generetor_formSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save(user=request.user)  # link student form with logged-in user
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-#     def get(self, request):
-#         student_form = Student.objects.filter(user=request.user)  # only current user
-#         serializer = Roadmap_Generetor_formSerializer(student_form, many=True)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-# # Generate roadmap only
-
-# import json
-
-# @api_view(['POST'])
-# def generate_roadmap_view(request):
-#     student_id = request.data.get("student_id")
-#     try:
-#         student = Student.objects.get(id=student_id, user=request.user)
-#         user_data = {
-#             "name": student.name,
-#             "email": student.email,
-#             "phone": student.phone,
-#             "address": student.address,
-#             "qualification": student.qualification,
-#             "college": student.college,
-#             "course": student.course,
-#             "branch": student.branch,
-#             "interest": student.interest,
-#             "skill": student.skill,
-#         }
-#         roadmap_text = generate_ai_roadmap(user_data)
-
-#         # 🛠️ Clean AI response (remove ```json ... ``` wrappers)
-#         cleaned = roadmap_text.strip().strip("`")
-#         if cleaned.startswith("json"):
-#             cleaned = cleaned[4:].strip()
-
-#         # Try to parse JSON safely
-#         try:
-#             roadmap_data = json.loads(cleaned)
-#         except Exception:
-#             roadmap_data = {"raw_text": roadmap_text}  # fallback
-
-#         return Response({
-#             "user_data": user_data,
-#             "roadmap": roadmap_data
-#         }, status=status.HTTP_200_OK)
-#     except Student.DoesNotExist:
-#         return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
-#     except Exception as e:
-#         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-# # Generate roadmap + resume + PDF
-# @api_view(['POST'])
-# def generate_ai_package(request):
-#     student_id = request.data.get("student_id")
-#     try:
-#         student = Student.objects.get(id=student_id, user=request.user)
-#         user_data = {
-#             "name": student.name,
-#             "dob": str(student.dob),
-#             "email": student.email,
-#             "phone": student.phone,
-#             "address": student.address,
-#             "qualification": student.qualification,
-#             "college": student.college,
-#             "course": student.course,
-#             "branch": student.branch,
-#             "interest": student.interest,
-#             "skill": student.skill,
-#         }
-#         # First generate roadmap
-#         roadmap = generate_ai_roadmap(user_data)
-#         # Then generate resume and PDF
-#         resume_data = generate_ai_resume(user_data, roadmap)
-#         return Response({
-#             "roadmap": roadmap,
-#             "resume": resume_data["resume"],
-#             "pdf_path": resume_data["pdf_path"]
-#         }, status=status.HTTP_200_OK)
-#     except Student.DoesNotExist:
-#         return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
-
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -128,17 +6,25 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth.models import User
 from django.conf import settings
-import os
+
 from .models import Student
 from .resume_generator import generate_resume
+from .models import Student, Education, Project, Language,ResumeHistory,RoadmapHistory,ContactUs
+
+
+import os
+
+
+
 
 # Import serializers and models
 from .serializers import (
     RegisterSerializer, 
     Roadmap_Generetor_formSerializer,
-    ResumeSerializer
+    ResumeSerializer,
+    ContactUsSerializer
 )
-from .models import Student, Education, Project, Language,ResumeHistory,RoadmapHistory
+
 
 # Import services
 from .service import generate_ai_roadmap
@@ -248,50 +134,6 @@ class ResumeView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# @api_view(['POST'])
-# @permission_classes([IsAuthenticated]) 
-# def generate_resume_view(request):
-#     """Generate AI-powered resume + PDF (with internships)"""
-#     student_id = request.data.get("student_id")
-#     try:
-#         student = Student.objects.get(id=student_id, user=request.user)
-
-#         user_data = {
-#             "personal": {
-#                 "name": student.name,
-#                 "dob": str(student.dob) if student.dob else "",
-#                 "email": student.email,
-#                 "phone": student.phone,
-#                 "address": student.address,
-#                 "linkedin": student.linkedin if hasattr(student, "linkedin") else "",
-#                 "github": student.github if hasattr(student, "github") else "",
-#                 "portfolio": student.portfolio if hasattr(student, "portfolio") else "",
-#                 "interested_field": student.interest,
-#             },
-#             "education": list(student.education.values()),
-#             "skills": student.skill.split(",") if student.skill else [],
-#             "projects": list(student.projects.values()),
-#             "languages": list(student.languages.values_list("name", flat=True)),
-
-#             # ✅ Add internships
-#             "internships": list(student.internships.values()) if student.internships.exists() else []
-#         }
-
-#         resume_data = generate_resume(user_data)
-
-#         # ✅ Build absolute PDF URL
-#         pdf_url = request.build_absolute_uri(settings.MEDIA_URL + resume_data["pdf_path"])
-
-#         return Response({
-#             "resume_text": resume_data["resume"],
-#             "pdf_url": pdf_url  # 👈 frontend can preview/download this
-#         }, status=status.HTTP_200_OK)
-
-#     except Student.DoesNotExist:
-#         return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
-#     except Exception as e:
-#         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
@@ -407,12 +249,6 @@ def generate_ai_package(request):
         return Response({"error": "Student not found"}, status=status.HTTP_404_NOT_FOUND)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from django.conf import settings
-
-from .models import ResumeHistory
 
 
 class ResumeHistoryView(APIView):
@@ -466,3 +302,14 @@ class RoadmapHistoryView(APIView):
             "count": len(data),
             "roadmaps": data
         })
+    
+class ContactUsView(APIView):
+    def post(self, request):
+        serializer = ContactUsSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "Your query has been submitted successfully"},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
