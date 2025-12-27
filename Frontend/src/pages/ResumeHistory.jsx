@@ -35,74 +35,72 @@ const ResumeHistory = () => {
     <>
       <Navbar />
 
-      <div className="min-h-screen p-6 bg-[#F2F7FB]">
-        <h1 className="text-2xl font-semibold mb-6">
-          Your Resume History
-        </h1>
+      {/* PAGE WRAPPER */}
+      <div className="min-h-screen bg-[#F2F7FB] py-10 px-4">
+        <div className="max-w-4xl mx-auto">
+          <h1 className="text-2xl font-semibold mb-6">
+            Your Resume History
+          </h1>
 
-        {/* ===== LOADING ===== */}
-        {loading && (
-          <p className="text-gray-400">Loading...</p>
-        )}
+          {/* ===== LOADING ===== */}
+          {loading && (
+            <p className="text-gray-400">Loading...</p>
+          )}
 
-        {/* ===== NO DATA ===== */}
-        {!loading && resumes.length === 0 && (
-          <p className="text-gray-500">
-            No resumes found.
-          </p>
-        )}
+          {/* ===== NO DATA ===== */}
+          {!loading && resumes.length === 0 && (
+            <p className="text-gray-500">
+              No resumes found.
+            </p>
+          )}
 
-        {/* ===== RESUME LIST ===== */}
-        <div className="space-y-4">
-          {resumes.map((resume) => (
-            <div
-              key={resume.id}
-              className="bg-white p-5 rounded-xl shadow-sm flex flex-col gap-4"
-            >
-              {/* HEADER */}
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
-                  <FileText size={20} />
+          {/* ===== RESUME LIST ===== */}
+          <div className="space-y-5">
+            {resumes.map((resume) => (
+              <div
+                key={resume.id}
+                className="bg-white p-6 rounded-xl shadow-sm"
+              >
+                {/* HEADER */}
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center">
+                    <FileText size={22} />
+                  </div>
+
+                  <div>
+                    <p className="font-medium text-lg">
+                      Resume for {resume.student_name}
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      {new Date(resume.created_at).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
 
-                <div>
-                  <p className="font-medium">
-                    Resume for {resume.student_name}
-                  </p>
-                  <p className="text-sm text-gray-500">
-                    {new Date(resume.created_at).toLocaleDateString()}
-                  </p>
+                {/* ACTION BUTTONS */}
+                <div className="flex gap-4 justify-end">
+                  <a
+                    href={resume.pdf_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg text-sm hover:bg-blue-700 w-32"
+                  >
+                    <ExternalLink size={16} />
+                    View
+                  </a>
+
+                  <a
+                    href={resume.pdf_url}
+                    download
+                    className="flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg text-sm hover:bg-green-700 w-32"
+                  >
+                    <Download size={16} />
+                    Download
+                  </a>
                 </div>
               </div>
-
-              {/* PREVIEW */}
-              <p className="text-sm text-gray-700 line-clamp-3">
-                {resume.resume_preview}
-              </p>
-
-              {/* ACTION BUTTONS */}
-              <div className="flex gap-4">
-                <a
-                  href={resume.pdf_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700"
-                >
-                  <ExternalLink size={16} />
-                  View
-                </a>
-
-                <a
-                  href={resume.pdf_url}
-                  download
-                  className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700"
-                >
-                  <Download size={16} />
-                  Download
-                </a>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </>

@@ -1,13 +1,13 @@
 import React from 'react'
 import Navbar from '../components/Navbar'
-
-
-const services = () => {
+import Tools from '../components/Tools'
+const Services = () => {
   return (
     <div>
       <Navbar/>
+      <Tools/>
     </div>
   )
 }
 
-export default services
+export default Services

@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Tools from "./components/Tools";
@@ -12,19 +12,21 @@ import RoadmapHistory from "./pages/RoadmapHistory";
 import ResumeHistory from "./pages/ResumeHistory";
 import Login from "./components/Login";
 import Contact from "./pages/Contact";
+import Services from "./pages/Services";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 const App = () => {
   return (
     <Routes>
-      {/* PUBLIC ROUTES */}
+      {/* ================= PUBLIC ROUTES ================= */}
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Login />} />
       <Route path="/contact" element={<Contact />} />
+      <Route path="/services" element={<Services />} />
       <Route path="/tools" element={<Tools />} />
 
-      {/* PROTECTED ROUTES */}
+      {/* ================= PROTECTED AI ROUTES ================= */}
       <Route
         path="/ai"
         element={
