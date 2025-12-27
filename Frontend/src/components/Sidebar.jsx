@@ -5,100 +5,93 @@ import { NavLink } from "react-router-dom";
 const navItems = [
   { to: "/ai", label: "Dashboard", Icon: House },
   { to: "/ai/Resume-builder", label: "Roadmap", Icon: FileText },
-  { to: "/ai/resume-form", label: "Resume Form", Icon: FileText }, // 👈 new
-  { to: "/ai/roadmap-history",label:"Roadmap History",Icon: FileText},
-  { to: "/ai/resume-history",label:"Resume History",Icon: FileText}
+  { to: "/ai/resume-form", label: "Resume Form", Icon: FileText },
+  { to: "/ai/roadmap-history", label: "Roadmap History", Icon: FileText },
+  { to: "/ai/resume-history", label: "Resume History", Icon: FileText },
 ];
 
-
 const Sidebar = ({ sidebar, setSidebar }) => {
-  const [username, setUsername] = useState(""); // 👈 state for username
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
-  const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("access_token");
+    if (!token) return;
 
-  if (!token) {
-    console.warn("No access token found. Skipping user fetch.");
-    return;
-  }
-
-  fetch("http://localhost:8000/api/user/", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((res) => {
-      if (res.status === 401) {
-        // Token expired or invalid
-        localStorage.clear();
-        window.location.href = "/login";
-        return;
-      }
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch user: " + res.status);
-      }
-
-      return res.json();
+    fetch("http://localhost:8000/api/user/", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
-    .then((data) => {
-      if (data?.username) {
-        setUsername(data.username);
-      }
-    })
-    .catch((err) => console.error("Error fetching username:", err));
-}, []);
-
+      .then((res) => {
+        if (res.status === 401) {
+          localStorage.clear();
+          window.location.href = "/login";
+          return;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (data?.username) setUsername(data.username);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
-    <div
-      className={`w-70 mt-20 bg-white border-r border-gray-200 flex flex-col justify-between items-center 
-      max-sm:absolute top-14 bottom-0 
-      ${sidebar ? "translate-x-0" : "max-sm:-translate-x-full"} 
-      transition-all duration-300 ease-in-out`}
+    <aside
+      className={`
+        fixed top-14 left-0 z-40
+        h-[calc(100vh-56px)] w-72
+        bg-white border-r border-gray-200
+        transition-transform duration-300
+        max-sm:absolute
+        ${sidebar ? "translate-x-0" : "max-sm:-translate-x-full"}
+      `}
     >
-      {/* Profile Section */}
-      <div className="my-7 w-full">
+      {/* ===== PROFILE ===== */}
+      <div className="py-15 border-b border-gray-100">
         <img
           src="/avatar.png"
-          alt="User avatar"
+          alt="User"
           className="w-14 h-14 rounded-full mx-auto object-cover"
         />
-        {/* 👈 display username dynamically */}
-        <h1 className="mt-2 text-center font-semibold text-gray-700">
+        <h2 className="mt-2 text-center font-semibold text-gray-700">
           {username || "Loading..."}
-        </h1>
-
-        {/* Navigation Links */}
-        <div className="px-6 mt-6 text-sm font-medium text-gray-600 space-y-2">
-          {navItems.map(({ to, label, Icon }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={to === "/ai"}
-              onClick={() => setSidebar(false)}
-              className={({ isActive }) =>
-                `px-3.5 py-2.5 flex items-center gap-3 rounded-lg transition-colors duration-200 
-                ${
-                  isActive
-                    ? "bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white shadow-md"
-                    : "hover:bg-gray-100"
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-gray-600"}`} />
-                  <span>{label}</span>
-                </>
-              )}
-            </NavLink>
-          ))}
-        </div>
+        </h2>
       </div>
-    </div>
+
+      {/* ===== NAV LINKS ===== */}
+      <nav className="px-4 py-4 space-y-2 text-sm font-medium">
+        {navItems.map(({ to, label, Icon }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={to === "/ai"}
+            onClick={() => setSidebar(false)}
+            className={({ isActive }) =>
+              `
+              flex items-center gap-3 px-4 py-2 rounded-lg transition
+              ${
+                isActive
+                  ? "bg-gradient-to-r from-[#3C81F6] to-[#9234EA] text-white shadow"
+                  : "text-gray-600 hover:bg-gray-100"
+              }
+            `
+            }
+          >
+            {({ isActive }) => (
+              <>
+                <Icon
+                  className={`w-5 h-5  ${
+                    isActive ? "text-white" : "text-gray-600"
+                  }`}
+                />
+                <span>{label}</span>
+              </>
+            )}
+          </NavLink>
+        ))}
+      </nav>
+    </aside>
   );
 };
 

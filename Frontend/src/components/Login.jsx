@@ -45,7 +45,7 @@ const Login = () => {
 
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
-
+        window.dispatchEvent(new Event("storage"));
         navigate("/ai");
       }
 
