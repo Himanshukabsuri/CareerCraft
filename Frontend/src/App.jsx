@@ -11,6 +11,7 @@ import RoadmapHistory from './pages/RoadmapHistory'
 import ResumeHistory from './pages/ResumeHistory'
 import Login from './components/Login'
 import Contact from './pages/Contact'
+import Services from './pages/services'
 const App = () => {
   return (
     <div>
@@ -18,6 +19,7 @@ const App = () => {
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login/>} />
          <Route path='/contact' element={<Contact/>}/>
+         <Route path='/services' element={<Services/>}/>
           <Route path='/tools' element={<Tools />} />
           <Route path='/ai' element={<Layout />}>
           <Route index element={<Dashboard />} />
