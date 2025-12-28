@@ -13,6 +13,7 @@ import Login from './components/Login'
 import Contact from './pages/Contact'
 import Services from './pages/services'
 import AboutUs from './pages/aboutus' // Import AboutUs component
+import AtsAnalyzer from './pages/AtsAnalyzer'
 const App = () => {
   return (
     <div>
@@ -21,7 +22,8 @@ const App = () => {
         <Route path='/login' element={<Login/>} />
         <Route path='/contact' element={<Contact/>}/>
         <Route path='/services' element={<Services/>}/>
-        <Route path='/aboutus' element={<AboutUs/>}/>   {/* top-level route */}
+        <Route path='/aboutus' element={<AboutUs/>}/>
+        <Route path='/ats' element={<AtsAnalyzer/>}/>
         <Route path='/tools' element={<Tools />} />
         <Route path='/ai' element={<Layout />}>
           <Route index element={<Dashboard />} />

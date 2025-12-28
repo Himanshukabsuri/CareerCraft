@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Student, Education, Project, Language, Internship,ContactUs
+from .models import Student, Education, Project, Language, Internship,ContactUs, ATSHistory
 
 
 # ------------------------------
@@ -106,3 +106,20 @@ class ContactUsSerializer(serializers.ModelSerializer):
         model = ContactUs
         fields = "__all__"
         read_only_fields = ["created_at"]
+
+class ATSAnalyzeSerializer(serializers.Serializer):
+    job_role = serializers.ChoiceField(choices=[("ml_engineer", "ML Engineer"), ("frontend", "Frontend"), ("backend", "Backend")])
+    file = serializers.FileField()
+
+class ATSHistorySerializer(serializers.ModelSerializer):
+    file_url = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ATSHistory
+        fields = ["id", "job_role", "ats_score", "matched_keywords", "missing_keywords", "issues", "ai_feedback", "file_url", "created_at"]
+
+    def get_file_url(self, obj):
+        request = self.context.get("request")
+        if not request:
+            return obj.file.url if hasattr(obj.file, "url") else ""
+        return request.build_absolute_uri(obj.file.url)

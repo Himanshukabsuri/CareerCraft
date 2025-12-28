@@ -2,8 +2,9 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -12,10 +13,18 @@ from .resume_generator import generate_resume
 from .models import Student, Education, Project, Language,ResumeHistory,RoadmapHistory,ContactUs
 
 
-import os
-
-
-
+import os, time, traceback
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.conf import settings
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from rest_framework.response import Response
+from .ats_analyzer import analyze_resume_ats
+from .models import ATSHistory
+from .serializers import ATSAnalyzeSerializer, ATSHistorySerializer
 
 # Import serializers and models
 from .serializers import (
@@ -342,3 +351,54 @@ class AboutUsView(APIView):
             ],
         }
         return Response(about_info, status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([IsAuthenticated])
+def analyze_ats_view(request):
+    serializer = ATSAnalyzeSerializer(data=request.data)
+    if not serializer.is_valid():
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    job_role = serializer.validated_data["job_role"]
+    file_obj = serializer.validated_data["file"]
+    try:
+        safe_name = f"{request.user.id}_{int(time.time())}_{file_obj.name}".replace(" ", "_")
+        rel_path = f"ats/resumes/{safe_name}"
+        saved_path = default_storage.save(rel_path, ContentFile(file_obj.read()))
+        abs_path = os.path.join(settings.MEDIA_ROOT, saved_path)
+
+        results = analyze_resume_ats(abs_path, job_role)
+
+        record = ATSHistory.objects.create(
+            user=request.user,
+            job_role=job_role,
+            file=saved_path,
+            ats_score=results.get("ats_score", 0),
+            matched_keywords=results.get("matched_keywords", []),
+            missing_keywords=results.get("missing_keywords", []),
+            issues=results.get("issues", []),
+            ai_feedback=results.get("ai_feedback", ""),
+        )
+
+        return Response(
+            {
+                "id": record.id,
+                **results,
+                "file_url": request.build_absolute_uri(settings.MEDIA_URL + saved_path),
+                "created_at": record.created_at,
+            },
+            status=status.HTTP_200_OK,
+        )
+    except Exception as e:
+        traceback.print_exc()
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ATSHistoryView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def get(self, request):
+        qs = ATSHistory.objects.filter(user=request.user).order_by("-created_at")
+        data = ATSHistorySerializer(qs, many=True, context={"request": request}).data
+        return Response({"count": len(data), "items": data}, status=status.HTTP_200_OK)

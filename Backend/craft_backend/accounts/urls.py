@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from .views import ResumeHistoryView, RoadmapHistoryView,generate_ai_package,ContactUsView
+from .views import ResumeHistoryView, RoadmapHistoryView,generate_ai_package,ContactUsView, analyze_ats_view, ATSHistoryView
 
 urlpatterns = [
     path('register/', views.Register_view.as_view(), name="register"),
@@ -18,6 +18,7 @@ urlpatterns = [
     path("roadmap/history/", RoadmapHistoryView.as_view(), name="roadmap-history"),
     path('contactus/',ContactUsView.as_view(),name="contact-us"),
     path('aboutus/',views.AboutUsView.as_view(),name="about-us"),
-
+    path("ats/analyze/", analyze_ats_view, name="ats-analyze"),
+    path("ats/history/", ATSHistoryView.as_view(), name="ats-history"),
 ]
 

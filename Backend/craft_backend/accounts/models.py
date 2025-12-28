@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User 
+from django.conf import settings
+
 class Student(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -112,4 +114,19 @@ class ContactUs(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.email}"
+
+
+class ATSHistory(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    job_role = models.CharField(max_length=64)
+    file = models.FileField(upload_to="ats/resumes/")
+    ats_score = models.IntegerField()
+    matched_keywords = models.JSONField(default=list)
+    missing_keywords = models.JSONField(default=list)
+    issues = models.JSONField(default=list)
+    ai_feedback = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"ATS {self.user} {self.job_role} {self.ats_score}"
 
