@@ -45,7 +45,7 @@ const Login = () => {
 
         localStorage.setItem("access_token", res.data.access);
         localStorage.setItem("refresh_token", res.data.refresh);
-
+        window.dispatchEvent(new Event("storage"));
         navigate("/ai");
       }
 
@@ -60,59 +60,106 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-6 rounded-lg w-80 shadow">
-        <h2 className="text-xl font-bold text-center mb-4">
-          {mode === "login" ? "Login" : "Sign Up"}
-        </h2>
+    <div className="py-16 min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl w-full">
+        
+        {/* Left Image */}
+        <div
+          className="hidden lg:block lg:w-1/2 bg-cover"
+          style={{
+            backgroundImage:
+              "url('https://images.unsplash.com/photo-1546514714-df0ccc50d7bf?auto=format&fit=crop&w=667&q=80')",
+          }}
+        />
 
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+        {/* Right Form */}
+        <div className="w-full p-8 lg:w-1/2">
+          <h2 className="text-2xl font-semibold text-gray-700 text-center">
+            Brand
+          </h2>
+          <p className="text-xl text-gray-600 text-center">
+            {mode === "login" ? "Welcome back!" : "Create your account"}
+          </p>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          />
-
-          {mode === "signup" && (
-            <input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full border px-3 py-2 rounded"
-            />
+          {error && (
+            <p className="text-red-500 text-sm text-center mt-3">{error}</p>
           )}
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-          />
+          <form onSubmit={handleSubmit} className="mt-6">
+            {/* Username */}
+            <div className="mt-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Username
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="bg-gray-200 text-gray-700 focus:outline-none border border-gray-300 rounded py-2 px-4 block w-full"
+              />
+            </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-500 text-white py-2 rounded"
-          >
-            {loading ? "Please wait..." : mode === "login" ? "Login" : "Sign Up"}
-          </button>
-        </form>
+            {/* Email (Signup only) */}
+            {mode === "signup" && (
+              <div className="mt-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="bg-gray-200 text-gray-700 focus:outline-none border border-gray-300 rounded py-2 px-4 block w-full"
+                />
+              </div>
+            )}
 
-        <p className="text-sm text-center mt-3">
-          {mode === "login" ? "New user?" : "Already have an account?"}{" "}
-          <span
-            onClick={() => setMode(mode === "login" ? "signup" : "login")}
-            className="text-blue-500 cursor-pointer"
-          >
-            {mode === "login" ? "Sign Up" : "Login"}
-          </span>
-        </p>
+            {/* Password */}
+            <div className="mt-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-gray-200 text-gray-700 focus:outline-none border border-gray-300 rounded py-2 px-4 block w-full"
+              />
+            </div>
+
+            {/* Button */}
+            <div className="mt-8">
+              <button
+                type="submit"
+                disabled={loading}
+                className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
+              >
+                {loading
+                  ? "Please wait..."
+                  : mode === "login"
+                  ? "Login"
+                  : "Sign Up"}
+              </button>
+            </div>
+          </form>
+
+          {/* Toggle */}
+          <div className="mt-4 text-center">
+            <p className="text-sm text-gray-600">
+              {mode === "login"
+                ? "Don't have an account?"
+                : "Already have an account?"}{" "}
+              <span
+                className="text-blue-500 cursor-pointer font-semibold"
+                onClick={() =>
+                  setMode(mode === "login" ? "signup" : "login")
+                }
+              >
+                {mode === "login" ? "Sign Up" : "Login"}
+              </span>
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

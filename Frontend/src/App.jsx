@@ -12,33 +12,28 @@ import ResumeHistory from './pages/ResumeHistory'
 import Login from './components/Login'
 import Contact from './pages/Contact'
 import Services from './pages/services'
-import AboutUs from './pages/aboutus'
+import AboutUs from './pages/aboutus' // Import AboutUs component
 const App = () => {
   return (
     <div>
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/login' element={<Login/>} />
-         <Route path='/contact' element={<Contact/>}/>
-         <Route path='/services' element={<Services/>}/>
-         <Route path='/aboutus' element={<AboutUs/>}/>
-          <Route path='/tools' element={<Tools />} />
-          <Route path='/ai' element={<Layout />}>
+        <Route path='/contact' element={<Contact/>}/>
+        <Route path='/services' element={<Services/>}/>
+        <Route path='/aboutus' element={<AboutUs/>}/>   {/* top-level route */}
+        <Route path='/tools' element={<Tools />} />
+        <Route path='/ai' element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path='Resume-builder' element={<ResumeBuilderForm/>}/>
           <Route path='/ai/resume-form' element={<ResumeForm />} />
-          <Route path='/ai//roadmap-history' element={<RoadmapHistory/>}/>
+          <Route path='/ai/roadmap-history' element={<RoadmapHistory/>}/> {/* remove double slash */}
           <Route path="/ai/resume-history" element={<ResumeHistory />} />
           <Route path='AIPackageResult' element={<AIPackageResult/>}/>
-          
-          
-       
-          </Route>
-        
-        
+        </Route>
       </Routes>
     </div>
   )
 }
 
-export default App
+export default App;

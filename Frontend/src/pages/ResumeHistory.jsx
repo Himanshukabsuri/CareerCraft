@@ -38,7 +38,7 @@ const ResumeHistory = () => {
       {/* PAGE WRAPPER */}
       <div className="min-h-screen bg-[#F2F7FB] py-10 px-4">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-2xl font-semibold mb-6">
+          <h1 className="text-2xl font-semibold mb-6 text-center mt-10">
             Your Resume History
           </h1>
 

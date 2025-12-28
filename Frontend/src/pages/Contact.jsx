@@ -25,21 +25,21 @@ const Contact = () => {
     setError("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/contactus/", {
+      const res = await fetch("http://127.0.0.1:8000/api/contactus/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (response.ok) {
+      if (res.ok) {
         setSuccess(data.message || "Message sent successfully!");
         setFormData({ name: "", email: "", phone: "", message: "" });
       } else {
         setError(data.error || "Something went wrong");
       }
-    } catch (err) {
+    } catch {
       setError("Server error. Please try again later.");
     }
 
@@ -50,30 +50,30 @@ const Contact = () => {
     <>
       <Navbar />
 
-      {/* PAGE WRAPPER */}
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-900 dark:text-gray-100 pt-16 mt-10">
-        
-        {/* HERO SECTION */}
-        <div className="bg-blue-600 dark:bg-blue-800 py-10 text-center">
-          <h1 className="text-3xl font-bold text-white">Contact Us</h1>
-          <p className="text-blue-100 mt-2 text-sm">
+      {/* PAGE */}
+      <div className="min-h-screen bg-white pt-24">
+        {/* HEADER */}
+        <div className="text-center mb-12">
+          <h1 className="text-3xl font-bold text-gray-800">Contact Us</h1>
+          <p className="text-gray-500 mt-2">
             Have a question? We’d love to hear from you.
           </p>
         </div>
 
         {/* FORM CARD */}
-        <div className="max-w-2xl mx-auto bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg mt-10">
-          <h2 className="text-xl font-semibold mb-4 text-center">
+        <div className="max-w-2xl mx-auto bg-white border border-gray-900 p-8 rounded-2xl shadow-sm">
+          <h2 className="text-xl font-semibold text-center mb-6 text-gray-800">
             Send us a message
           </h2>
 
           {success && (
-            <p className="text-green-600 text-sm text-center mb-3">
+            <p className="text-green-600 text-sm text-center mb-4">
               {success}
             </p>
           )}
+
           {error && (
-            <p className="text-red-600 text-sm text-center mb-3">
+            <p className="text-red-600 text-sm text-center mb-4">
               {error}
             </p>
           )}
@@ -85,8 +85,8 @@ const Contact = () => {
               value={formData.name}
               onChange={handleChange}
               placeholder="Your name"
-              className="w-full p-2.5 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
               required
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             />
 
             <input
@@ -95,8 +95,8 @@ const Contact = () => {
               value={formData.email}
               onChange={handleChange}
               placeholder="Your email"
-              className="w-full p-2.5 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
               required
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             />
 
             <input
@@ -105,7 +105,7 @@ const Contact = () => {
               value={formData.phone}
               onChange={handleChange}
               placeholder="Phone (optional)"
-              className="w-full p-2.5 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
             />
 
             <textarea
@@ -114,14 +114,14 @@ const Contact = () => {
               value={formData.message}
               onChange={handleChange}
               placeholder="Your message"
-              className="w-full p-2.5 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-slate-900 focus:ring-2 focus:ring-blue-500 outline-none"
               required
+              className="w-full p-3 border rounded-lg resize-none focus:ring-2 focus:ring-blue-500 outline-none"
             />
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 dark:hover:bg-blue-500 text-white py-2.5 rounded-md font-semibold transition disabled:opacity-50"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition disabled:opacity-50"
             >
               {loading ? "Sending..." : "Send Message"}
             </button>
