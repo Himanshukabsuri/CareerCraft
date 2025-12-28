@@ -16,7 +16,8 @@ urlpatterns = [
     path('generate_resume/', views.generate_resume_view, name="generate_resume"),
     path("resume/history/", ResumeHistoryView.as_view(), name="resume-history"),
     path("roadmap/history/", RoadmapHistoryView.as_view(), name="roadmap-history"),
-    path('contactus/',ContactUsView.as_view(),name="contact-us")
+    path('contactus/',ContactUsView.as_view(),name="contact-us"),
+    path('aboutus/',views.AboutUsView.as_view(),name="about-us"),
 
 ]
 

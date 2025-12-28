@@ -313,3 +313,32 @@ class ContactUsView(APIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class AboutUsView(APIView):
+    def get(self, request):
+        about_info = {
+            "app_name": "CareerCraft",
+            "version": "1.0.0",
+            "description": "CareerCraft is an AI-powered platform designed to help students and professionals craft personalized career roadmaps and resumes. Our mission is to empower individuals to achieve their career goals through innovative technology and user-centric design.",
+            "features": [
+                "AI-Generated Career Roadmaps",
+                "Custom Resume Builder",
+                "User-Friendly Interface",
+                "Secure User Authentication",
+                "Comprehensive History Tracking"
+            ],
+            "contact_email": "CareerCraft@gmail.com",
+            "website": "https://www.careercraft.com",
+            "social_media": {
+                "linkedin": "https://www.linkedin.com/company/careercraft",
+                "twitter": "https://twitter.com/careercraft",
+                "facebook": "https://www.facebook.com/careercraft"
+            },
+            "team": [
+                {"name": "Priyanshu Kothari", "role": "Founder & CEO"},
+                {"name": "Sagar Thapliyal", "role": "Chief Technology Officer"},
+                {"name": "Manish Ghildiyal", "role": "Head of Product"},
+                {"name": "Himanshu Kabsuri", "role": "Lead Developer"}
+            ],
+        }
+        return Response(about_info, status=status.HTTP_200_OK)

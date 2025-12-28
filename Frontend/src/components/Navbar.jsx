@@ -63,7 +63,7 @@ const Navbar = () => {
 
           <ul className="hidden md:flex items-center gap-8 text-gray-100 font-medium">
             <li onClick={() => navigate("/")} className="cursor-pointer">Home</li>
-            <li  className="cursor-pointer">About</li>
+            <li onClick={() => navigate("/aboutus")} className="cursor-pointer">About Us</li>
             <li onClick={()=>navigate("/services")} className="cursor-pointer">Services</li>
             <li onClick={()=>navigate("/contact")} className="cursor-pointer">Contact</li>
 
