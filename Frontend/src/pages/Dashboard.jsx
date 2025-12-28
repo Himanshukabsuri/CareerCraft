@@ -66,7 +66,7 @@ const Dashboard = () => {
     <>
       <Navbar/>
 
-      <div className="min-h-screen p-6 bg-[#F2F7FB] ">
+      <div className="min-h-screen p-6 bg-[#F2F7FB] mt-15 ml-15 ">
         {/* ===== Count Cards ===== */}
         <div className="flex gap-4 mb-8 flex-wrap">
           {/* Resume Count */}
