@@ -345,8 +345,8 @@ class AboutUsView(APIView):
             },
             "team": [
                 {"name": "Priyanshu Kothari", "role": "Founder & CEO"},
-                {"name": "Sagar Thapliyal", "role": "Chief Technology Officer"},
-                {"name": "Manish Ghildiyal", "role": "Head of Product"},
+                {"name": "Manish Ghildiyal", "role": "Co-Founder & Head of Product "},
+                {"name": "Sagar Thapliyal", "role": "Chief Technology Officer"},   
                 {"name": "Himanshu Kabsuri", "role": "Lead Developer"}
             ],
         }

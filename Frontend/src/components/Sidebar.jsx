@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { House, FileText } from "lucide-react";
+import { House, FileText, ScanSearch } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const navItems = [
   { to: "/ai", label: "Dashboard", Icon: House },
   { to: "/ai/Resume-builder", label: "Roadmap", Icon: FileText },
   { to: "/ai/resume-form", label: "Resume Form", Icon: FileText },
+
+  // 🔥 ATS ANALYZER ADDED
+  { to: "/ai/ats-analyzer", label: "ATS Analyzer", Icon: ScanSearch },
+
   { to: "/ai/roadmap-history", label: "Roadmap History", Icon: FileText },
   { to: "/ai/resume-history", label: "Resume History", Icon: FileText },
 ];
@@ -14,7 +18,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
   const [username, setUsername] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem("access") || localStorage.getItem("access_token");
     if (!token) return;
 
     fetch("http://localhost:8000/api/user/", {
@@ -48,13 +52,13 @@ const Sidebar = ({ sidebar, setSidebar }) => {
       `}
     >
       {/* ===== PROFILE ===== */}
-      <div className="py-15 border-b border-gray-100">
+      <div className="py-6 border-b border-gray-100 text-center">
         <img
           src="/avatar.png"
           alt="User"
           className="w-14 h-14 rounded-full mx-auto object-cover"
         />
-        <h2 className="mt-2 text-center font-semibold text-gray-700">
+        <h2 className="mt-2 font-semibold text-gray-700">
           {username || "Loading..."}
         </h2>
       </div>
@@ -81,8 +85,8 @@ const Sidebar = ({ sidebar, setSidebar }) => {
             {({ isActive }) => (
               <>
                 <Icon
-                  className={`w-5 h-5  ${
-                    isActive ? "text-white" : "text-gray-600"
+                  className={`w-5 h-5 ${
+                    isActive ? "text-white" : "text-gray-500"
                   }`}
                 />
                 <span>{label}</span>

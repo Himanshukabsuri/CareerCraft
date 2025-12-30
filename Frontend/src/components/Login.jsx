@@ -35,7 +35,6 @@ const Login = () => {
           email,
           password,
         });
-        alert("Signup successful! Please login.");
         setMode("login");
       } else {
         const res = await axios.post(`${API_URL}/token/`, {
@@ -60,106 +59,113 @@ const Login = () => {
   };
 
   return (
-    <div className="py-16 min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="flex bg-white rounded-lg shadow-lg overflow-hidden mx-auto max-w-sm lg:max-w-4xl w-full">
-        
-        {/* Left Image */}
-        <div
-          className="hidden lg:block lg:w-1/2 bg-cover"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1546514714-df0ccc50d7bf?auto=format&fit=crop&w=667&q=80')",
-          }}
-        />
+    <div className="min-h-screen bg-amber-200 flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-4xl shadow-xl p-8">
 
-        {/* Right Form */}
-        <div className="w-full p-8 lg:w-1/2">
-          <h2 className="text-2xl font-semibold text-gray-700 text-center">
-            Brand
-          </h2>
-          <p className="text-xl text-gray-600 text-center">
-            {mode === "login" ? "Welcome back!" : "Create your account"}
-          </p>
+        {/* HEADER */}
+        <h2 className="text-3xl font-bold text-gray-900 text-center">
+          CareerCraft
+        </h2>
+        <p className="text-gray-600 text-center mt-2">
+          {mode === "login"
+            ? "Sign in to your account"
+            : "Create your free account"}
+        </p>
 
-          {error && (
-            <p className="text-red-500 text-sm text-center mt-3">{error}</p>
+        {error && (
+          <div className="mt-6 text-sm text-red-600 bg-red-50 border border-red-200 px-4 py-2 rounded-lg">
+            {error}
+          </div>
+        )}
+
+        {/* FORM */}
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+
+          {/* USERNAME */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Username
+            </label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="
+                w-full rounded-xl border border-gray-600
+                px-4 py-3 text-gray-900 bg-white
+                focus:outline-none focus:ring-2 focus:ring-blue-500
+              "
+            />
+          </div>
+
+          {/* EMAIL (SIGNUP ONLY) */}
+          {mode === "signup" && (
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Email address
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="
+                  w-full rounded-xl border border-gray-600
+                  px-4 py-3 text-gray-900 bg-white
+                  focus:outline-none focus:ring-2 focus:ring-blue-500
+                "
+              />
+            </div>
           )}
 
-          <form onSubmit={handleSubmit} className="mt-6">
-            {/* Username */}
-            <div className="mt-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Username
-              </label>
-              <input
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="bg-gray-200 text-gray-700 focus:outline-none border border-gray-300 rounded py-2 px-4 block w-full"
-              />
-            </div>
-
-            {/* Email (Signup only) */}
-            {mode === "signup" && (
-              <div className="mt-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-gray-200 text-gray-700 focus:outline-none border border-gray-300 rounded py-2 px-4 block w-full"
-                />
-              </div>
-            )}
-
-            {/* Password */}
-            <div className="mt-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
-                Password
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="bg-gray-200 text-gray-700 focus:outline-none border border-gray-300 rounded py-2 px-4 block w-full"
-              />
-            </div>
-
-            {/* Button */}
-            <div className="mt-8">
-              <button
-                type="submit"
-                disabled={loading}
-                className="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600"
-              >
-                {loading
-                  ? "Please wait..."
-                  : mode === "login"
-                  ? "Login"
-                  : "Sign Up"}
-              </button>
-            </div>
-          </form>
-
-          {/* Toggle */}
-          <div className="mt-4 text-center">
-            <p className="text-sm text-gray-600">
-              {mode === "login"
-                ? "Don't have an account?"
-                : "Already have an account?"}{" "}
-              <span
-                className="text-blue-500 cursor-pointer font-semibold"
-                onClick={() =>
-                  setMode(mode === "login" ? "signup" : "login")
-                }
-              >
-                {mode === "login" ? "Sign Up" : "Login"}
-              </span>
-            </p>
+          {/* PASSWORD */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="
+                w-full rounded-xl border border-gray-600
+                px-4 py-3 text-gray-900 bg-white
+                focus:outline-none focus:ring-2 focus:ring-blue-500
+              "
+            />
           </div>
-        </div>
+
+          {/* BUTTON */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="
+              w-full bg-blue-600 hover:bg-blue-700
+              text-white font-semibold py-3 rounded-xl
+              transition disabled:opacity-60
+            "
+          >
+            {loading
+              ? "Please wait..."
+              : mode === "login"
+              ? "Sign In"
+              : "Create Account"}
+          </button>
+        </form>
+
+        {/* TOGGLE */}
+        <p className="mt-8 text-center text-sm text-gray-600">
+          {mode === "login"
+            ? "Don’t have an account?"
+            : "Already have an account?"}{" "}
+          <button
+            onClick={() =>
+              setMode(mode === "login" ? "signup" : "login")
+            }
+            className="text-blue-600 font-semibold hover:underline"
+          >
+            {mode === "login" ? "Sign up" : "Sign in"}
+          </button>
+        </p>
       </div>
     </div>
   );
