@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import Loader from "../components/Loading";
 export default function AtsAnalyzer() {
   const [file, setFile] = useState(null);
   const [jobRole, setJobRole] = useState("ml_engineer");
@@ -23,47 +23,73 @@ export default function AtsAnalyzer() {
 
   const onDrop = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
-    handleFile(e.dataTransfer.files[0]);
+    const f = e.dataTransfer.files?.[0];
+    handleFile(f);
   };
 
   const getAccessToken = () => {
-    return (
-      localStorage.getItem("access") ||
-      localStorage.getItem("token") ||
-      ""
-    );
+    const candidates = [
+      "access",
+      "token",
+      "access_token",
+      "authTokens",
+      "auth",
+      "user",
+    ];
+    for (const key of candidates) {
+      const raw = localStorage.getItem(key);
+      if (!raw) continue;
+      try {
+        if (raw.startsWith("{")) {
+          const obj = JSON.parse(raw);
+          return (
+            obj.access ||
+            obj.token ||
+            obj.access_token ||
+            obj?.tokens?.access ||
+            obj?.user?.access ||
+            ""
+          );
+        }
+        return raw;
+      } catch {
+        return raw;
+      }
+    }
+    return "";
   };
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    if (!file) {
-      setError("Please upload a PDF resume.");
-      return;
-    }
-
-    setLoading(true);
     setError("");
     setResult(null);
+    if (!file) {
+      setError("Please select a PDF file.");
+      return;
+    }
+    const form = new FormData();
+    form.append("file", file);
+    form.append("job_role", jobRole);
 
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("job_role", jobRole);
-
+    setLoading(true);
     try {
+      const token = getAccessToken();
       const res = await fetch("http://127.0.0.1:8000/api/ats/analyze/", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${getAccessToken()}`,
-        },
-        body: formData,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        body: form,
       });
-
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Analysis failed");
+      if (res.status === 401) {
+        setError("Unauthorized. Please login again.");
+        return;
+      }
+      if (!res.ok) throw new Error(data?.error || "Failed to analyze");
       setResult(data);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Server error");
     } finally {
       setLoading(false);
     }
@@ -73,61 +99,56 @@ export default function AtsAnalyzer() {
     setFile(null);
     setResult(null);
     setError("");
+    setLoading(false);
+  };
+
+  const scoreColor = (s) => {
+    if (s >= 75) return "bg-green-500";
+    if (s >= 50) return "bg-yellow-500";
+    return "bg-red-500";
   };
 
   return (
     <>
       <Navbar />
-
-      <div className="min-h-screen bg-gray-50 pt-24 px-4">
-        <div className="max-w-6xl mx-auto">
-
-          {/* HEADER */}
-          <div className="mb-10">
-            <span className="inline-block text-sm font-semibold text-blue-600 bg-blue-50 px-4 py-1 rounded-full">
-              ATS Resume Analyzer
-            </span>
-            <h1 className="text-3xl font-bold mt-4 text-gray-800">
-              Optimize Your Resume for ATS
+ {loading && <Loader />}
+      {/* 🔽 ONLY BACKGROUND COLOR CHANGED HERE */}
+      <div className="min-h-screen bg-[#f8fafc] text-gray-900 pt-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-50 text-blue-700">
+              <span className="text-xl">📄</span>
+              <span className="text-sm font-medium">ATS Resume Analyzer</span>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold mt-4">
+              Improve your resume for ATS
             </h1>
-            <p className="text-gray-500 mt-2 max-w-2xl">
-              Upload your resume and get ATS score, missing keywords and AI-based feedback.
+            <p className="text-gray-600 mt-2">
+              Upload your PDF resume and get keyword coverage, issues, and AI
+              feedback tailored to the selected role.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-
-            {/* LEFT CARD */}
-            <div className="bg-white border border-gray-900 rounded-2xl shadow-sm p-6">
-              <form onSubmit={onSubmit} className="space-y-6">
-
-                {/* JOB ROLE SELECT */}
+          {/* Card */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="rounded-2xl border border-gray-200 shadow-sm bg-white">
+              <form onSubmit={onSubmit} className="p-6 space-y-5">
+                {/* Job Role */}
                 <div>
-                  <label className="block mb-1 text-sm font-medium text-gray-700">
-                    Target Job Role
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={jobRole}
-                      onChange={(e) => setJobRole(e.target.value)}
-                      className="
-                        appearance-none w-full rounded-lg
-                        border border-gray-500 bg-white
-                        px-4 py-3 pr-10 text-gray-800
-                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                      "
-                    >
-                      <option value="ml_engineer">ML Engineer</option>
-                      <option value="frontend">Frontend Developer</option>
-                      <option value="backend">Backend Developer</option>
-                    </select>
-                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
-                      ▼
-                    </span>
-                  </div>
+                  <label className="block mb-2 font-medium">Job Role</label>
+                  <select
+                    value={jobRole}
+                    onChange={(e) => setJobRole(e.target.value)}
+                    className="border px-3 py-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  >
+                    <option value="ml_engineer">ML Engineer</option>
+                    <option value="frontend">Frontend</option>
+                    <option value="backend">Backend</option>
+                  </select>
                 </div>
 
-                {/* FILE UPLOAD */}
+                {/* Dropzone */}
                 <div
                   onDragOver={(e) => {
                     e.preventDefault();
@@ -135,47 +156,63 @@ export default function AtsAnalyzer() {
                   }}
                   onDragLeave={() => setIsDragging(false)}
                   onDrop={onDrop}
-                  onClick={() => inputRef.current.click()}
-                  className={`cursor-pointer border-2 border-dashed rounded-xl p-8 text-center transition
+                  className={`relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 transition
                     ${
                       isDragging
-                        ? "border-blue-800 bg-blue-50"
-                        : "border-gray-300 hover:border-blue-600"
-                    }`}
+                        ? "border-blue-500 bg-blue-50"
+                        : "border-gray-300"
+                    }
+                    ${file ? "bg-gray-50" : "bg-white"}`}
                 >
                   <input
                     ref={inputRef}
                     type="file"
                     accept="application/pdf"
                     className="hidden"
-                    onChange={(e) => handleFile(e.target.files[0])}
+                    onChange={(e) =>
+                      handleFile(e.target.files?.[0] || null)
+                    }
                   />
-
-                  <p className="text-gray-600 text-sm">
-                    Drag & drop your resume here or{" "}
-                    <span className="text-blue-600 font-medium">browse</span>
+                  <div className="text-4xl">⬆️</div>
+                  <p className="text-sm text-center">
+                    Drag & drop your PDF here or{" "}
+                    <button
+                      type="button"
+                      onClick={() => inputRef.current?.click()}
+                      className="text-blue-600 font-medium underline"
+                    >
+                      browse
+                    </button>
                   </p>
 
                   {file && (
-                    <p className="mt-3 text-green-600 text-sm font-medium">
-                      ✔ {file.name}
-                    </p>
+                    <div className="mt-3 w-full">
+                      <div className="flex items-center justify-between rounded-lg bg-gray-100 px-3 py-2">
+                        <div className="text-sm truncate">{file.name}</div>
+                        <button
+                          type="button"
+                          onClick={() => setFile(null)}
+                          className="text-xs px-2 py-1 rounded bg-red-500 text-white"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    </div>
                   )}
                 </div>
 
-                {/* BUTTONS */}
-                <div className="flex gap-3">
+                {/* Actions */}
+                <div className="flex items-center gap-3">
                   <button
                     disabled={loading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg font-medium transition disabled:opacity-50"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg disabled:opacity-60 transition"
                   >
-                    {loading ? "Analyzing..." : "Analyze Resume"}
+                    {loading ? "Analyzing..." : "Analyze"}
                   </button>
-
                   <button
                     type="button"
                     onClick={resetAll}
-                    className="px-5 py-2.5 rounded-lg border border-gray-500 hover:bg-gray-200"
+                    className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
                   >
                     Reset
                   </button>
@@ -185,67 +222,127 @@ export default function AtsAnalyzer() {
               </form>
             </div>
 
-            {/* RIGHT CARD */}
-            <div className="bg-white border border-gray-900 rounded-2xl shadow-sm p-6">
+            {/* Results */}
+            <div className="rounded-2xl border border-gray-200 shadow-sm bg-white p-6">
               {!result ? (
-                <p className="text-gray-500 text-sm">
-                  Results will appear here after analysis.
-                </p>
+                <div className="text-gray-500">
+                  <p className="font-medium">Results will appear here.</p>
+                  <p className="text-sm mt-1">
+                    Upload a resume and click Analyze.
+                  </p>
+                </div>
               ) : (
                 <div className="space-y-6">
-
-                  {/* SCORE */}
+                  {/* Score */}
                   <div>
-                    <div className="flex justify-between text-sm font-medium">
-                      <span>ATS Score</span>
-                      <span>{result.ats_score}/100</span>
+                    <div className="flex items-center justify-between">
+                      <p className="font-semibold">ATS Score</p>
+                      <p className="text-sm text-gray-500">
+                        {result.ats_score}/100
+                      </p>
                     </div>
-                    <div className="h-3 bg-gray-200 rounded-full mt-2">
+                    <div className="h-3 rounded-full bg-gray-200 mt-2">
                       <div
-                        className={`h-3 rounded-full ${
-                          result.ats_score >= 75
-                            ? "bg-green-500"
-                            : result.ats_score >= 50
-                            ? "bg-yellow-500"
-                            : "bg-red-500"
-                        }`}
-                        style={{ width: `${result.ats_score}%` }}
+                        className={`h-3 rounded-full ${scoreColor(
+                          result.ats_score
+                        )}`}
+                        style={{
+                          width: `${Math.min(result.ats_score, 100)}%`,
+                        }}
                       />
                     </div>
                   </div>
 
-                  {/* KEYWORDS */}
-                  <div>
-                    <h4 className="font-semibold mb-2">Missing Keywords</h4>
-                    <div className="flex flex-wrap gap-2">
-                      {result.missing_keywords?.length ? (
-                        result.missing_keywords.map((kw, i) => (
-                          <span
-                            key={i}
-                            className="text-xs px-3 py-1 rounded-full bg-red-50 text-red-600"
-                          >
-                            {kw}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="text-sm text-gray-500">None 🎉</span>
-                      )}
+                  {/* Keywords */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="font-semibold mb-2">Matched Keywords</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(result.matched_keywords || []).length === 0 ? (
+                          <span className="text-sm text-gray-500">None</span>
+                        ) : (
+                          (result.matched_keywords || []).map((kw, i) => (
+                            <span
+                              key={i}
+                              className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700"
+                            >
+                              {kw}
+                            </span>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <p className="font-semibold mb-2">Missing Keywords</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(result.missing_keywords || []).length === 0 ? (
+                          <span className="text-sm text-gray-500">None</span>
+                        ) : (
+                          (result.missing_keywords || []).map((kw, i) => (
+                            <span
+                              key={i}
+                              className="text-xs px-2 py-1 rounded-full bg-amber-100 text-amber-700"
+                            >
+                              {kw}
+                            </span>
+                          ))
+                        )}
+                      </div>
                     </div>
                   </div>
 
-                  {/* AI FEEDBACK */}
+                  {/* Issues */}
+                  <div>
+                    <p className="font-semibold mb-2">Issues</p>
+                    <ul className="list-disc list-inside space-y-1 text-sm">
+                      {(result.issues || []).length === 0 ? (
+                        <li className="text-gray-500">No issues found.</li>
+                      ) : (
+                        (result.issues || []).map((i, idx) => (
+                          <li key={idx}>{i}</li>
+                        ))
+                      )}
+                    </ul>
+                  </div>
+
+                  {/* AI Feedback */}
                   {result.ai_feedback && (
                     <div>
-                      <h4 className="font-semibold mb-2">AI Feedback</h4>
-                      <pre className="text-sm bg-gray-100 p-3 rounded-lg whitespace-pre-wrap">
+                      <div className="flex items-center justify-between">
+                        <p className="font-semibold">AI Feedback</p>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            navigator.clipboard.writeText(
+                              result.ai_feedback || ""
+                            )
+                          }
+                          className="text-xs px-2 py-1 rounded border border-gray-300 hover:bg-gray-50 transition"
+                        >
+                          Copy
+                        </button>
+                      </div>
+                      <pre className="whitespace-pre-wrap text-sm bg-gray-100 p-3 rounded mt-2">
                         {result.ai_feedback}
                       </pre>
+                    </div>
+                  )}
+
+                  {result.file_url && (
+                    <div className="flex items-center justify-between">
+                      <a
+                        href={result.file_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 underline text-sm"
+                      >
+                        View uploaded PDF
+                      </a>
                     </div>
                   )}
                 </div>
               )}
             </div>
-
           </div>
         </div>
       </div>
