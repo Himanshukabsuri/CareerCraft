@@ -63,11 +63,26 @@ const Navbar = () => {
           />
 
           <ul className="hidden md:flex items-center gap-8 text-gray-100 font-medium">
-            <li onClick={() => navigate("/")} className="cursor-pointer">Home</li>
-            <li onClick={() => navigate("/aboutus")} className="cursor-pointer">About Us</li>
-            <li onClick={()=>navigate("/services")} className="cursor-pointer">Services</li>
-            
-            <li onClick={()=>navigate("/contact")} className="cursor-pointer">Contact</li>
+            <li
+              onClick={() => navigate(loggedIn ? "/ai" : "/")}
+              className="cursor-pointer"
+            >
+              Home
+            </li>
+
+            <li onClick={() => navigate("/aboutus")} className="cursor-pointer">
+              About Us
+            </li>
+            <li
+              onClick={() => navigate("/services")}
+              className="cursor-pointer"
+            >
+              Services
+            </li>
+
+            <li onClick={() => navigate("/contact")} className="cursor-pointer">
+              Contact
+            </li>
 
             {loggedIn ? (
               <button
@@ -98,11 +113,23 @@ const Navbar = () => {
         {/* MOBILE MENU */}
         {menuOpen && (
           <div className="md:hidden bg-white shadow-lg px-6 py-4 space-y-4">
-            <p onClick={() => navigate("/")} className="cursor-pointer">Home</p>
-            <p onClick={() => navigate("/aboutus")} className="cursor-pointer">About Us</p>
-            <p onClick={() => navigate("/services")} className="cursor-pointer">Services</p>
-            
-            <p onClick={() => navigate("/contact")} className="cursor-pointer">Contact</p>
+            <p
+              onClick={() => navigate(loggedIn ? "/ai" : "/")}
+              className="cursor-pointer"
+            >
+              Home
+            </p>
+
+            <p onClick={() => navigate("/aboutus")} className="cursor-pointer">
+              About Us
+            </p>
+            <p onClick={() => navigate("/services")} className="cursor-pointer">
+              Services
+            </p>
+
+            <p onClick={() => navigate("/contact")} className="cursor-pointer">
+              Contact
+            </p>
 
             {loggedIn ? (
               <button
@@ -122,7 +149,6 @@ const Navbar = () => {
           </div>
         )}
       </nav>
-      
     </>
   );
 };

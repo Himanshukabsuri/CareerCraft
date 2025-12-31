@@ -2,6 +2,8 @@ import React, { useState, useRef } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loader from "../components/Loading";
+import Sidebar from "../components/Sidebar";
+
 export default function AtsAnalyzer() {
   const [file, setFile] = useState(null);
   const [jobRole, setJobRole] = useState("ml_engineer");
@@ -111,9 +113,12 @@ export default function AtsAnalyzer() {
   return (
     <>
       <Navbar />
- {loading && <Loader />}
+      {loading && <Loader />}
+
+      <Sidebar />
+
       {/* 🔽 ONLY BACKGROUND COLOR CHANGED HERE */}
-      <div className="min-h-screen bg-[#f8fafc] text-gray-900 pt-24 px-6">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-gray-900 pt-24 px-6">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="mb-8">
@@ -132,15 +137,17 @@ export default function AtsAnalyzer() {
 
           {/* Card */}
           <div className="grid md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-gray-200 shadow-sm bg-white">
-              <form onSubmit={onSubmit} className="p-6 space-y-5">
+            <div className="rounded-2xl border border-gray-600 bg-white/90 backdrop-blur shadow-lg hover:shadow-xl transition">
+              <form onSubmit={onSubmit} className="p-6 space-y-6">
                 {/* Job Role */}
                 <div>
                   <label className="block mb-2 font-medium">Job Role</label>
                   <select
                     value={jobRole}
                     onChange={(e) => setJobRole(e.target.value)}
-                    className="border px-3 py-2 rounded w-full bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2
+             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+             transition shadow-sm"
                   >
                     <option value="ml_engineer">ML Engineer</option>
                     <option value="frontend">Frontend</option>
@@ -156,30 +163,32 @@ export default function AtsAnalyzer() {
                   }}
                   onDragLeave={() => setIsDragging(false)}
                   onDrop={onDrop}
-                  className={`relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed p-6 transition
-                    ${
-                      isDragging
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-300"
-                    }
-                    ${file ? "bg-gray-50" : "bg-white"}`}
+                  className={`relative flex flex-col items-center justify-center gap-3 rounded-xl
+    border-2 border-dashed p-8 text-center transition-all duration-300
+    ${
+      isDragging
+        ? "border-blue-500 bg-blue-50 scale-[1.02]"
+        : "border-gray-300 hover:border-blue-400"
+    }
+    ${file ? "bg-slate-50" : "bg-white"}`}
                 >
                   <input
                     ref={inputRef}
                     type="file"
                     accept="application/pdf"
                     className="hidden"
-                    onChange={(e) =>
-                      handleFile(e.target.files?.[0] || null)
-                    }
+                    onChange={(e) => handleFile(e.target.files?.[0] || null)}
                   />
-                  <div className="text-4xl">⬆️</div>
-                  <p className="text-sm text-center">
+                  <div className="text-5xl text-blue-500 animate-pulse">
+                    ⬆️
+                  </div>
+
+                  <p className="text-sm text-gray-600">
                     Drag & drop your PDF here or{" "}
                     <button
                       type="button"
                       onClick={() => inputRef.current?.click()}
-                      className="text-blue-600 font-medium underline"
+                      className="font-semibold text-blue-600 hover:text-blue-700 underline"
                     >
                       browse
                     </button>
@@ -187,12 +196,12 @@ export default function AtsAnalyzer() {
 
                   {file && (
                     <div className="mt-3 w-full">
-                      <div className="flex items-center justify-between rounded-lg bg-gray-100 px-3 py-2">
+                      <div className="flex items-center justify-between rounded-lg bg-slate-100 px-4 py-3 shadow-sm">
                         <div className="text-sm truncate">{file.name}</div>
                         <button
                           type="button"
                           onClick={() => setFile(null)}
-                          className="text-xs px-2 py-1 rounded bg-red-500 text-white"
+                          className="text-xs px-3 py-1 rounded-full bg-red-500 hover:bg-red-600 text-white transition"
                         >
                           Remove
                         </button>
@@ -205,14 +214,18 @@ export default function AtsAnalyzer() {
                 <div className="flex items-center gap-3">
                   <button
                     disabled={loading}
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg disabled:opacity-60 transition"
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600
+             hover:from-blue-700 hover:to-indigo-700
+             text-white px-6 py-2 rounded-lg shadow-md
+             disabled:opacity-60 transition"
                   >
                     {loading ? "Analyzing..." : "Analyze"}
                   </button>
                   <button
                     type="button"
                     onClick={resetAll}
-                    className="px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition"
+                    className="px-4 py-2 rounded-lg border border-gray-300
+             hover:bg-gray-100 transition shadow-sm"
                   >
                     Reset
                   </button>
@@ -223,7 +236,7 @@ export default function AtsAnalyzer() {
             </div>
 
             {/* Results */}
-            <div className="rounded-2xl border border-gray-200 shadow-sm bg-white p-6">
+            <div className="rounded-2xl border border-gray-600 bg-white/95 backdrop-blur p-6 shadow-lg">
               {!result ? (
                 <div className="text-gray-500">
                   <p className="font-medium">Results will appear here.</p>
@@ -241,9 +254,9 @@ export default function AtsAnalyzer() {
                         {result.ats_score}/100
                       </p>
                     </div>
-                    <div className="h-3 rounded-full bg-gray-200 mt-2">
+                    <div className="h-3 rounded-full bg-gray-200 mt-2 overflow-hidden">
                       <div
-                        className={`h-3 rounded-full ${scoreColor(
+                        className={`h-3 rounded-full transition-all duration-700 ${scoreColor(
                           result.ats_score
                         )}`}
                         style={{
@@ -259,12 +272,14 @@ export default function AtsAnalyzer() {
                       <p className="font-semibold mb-2">Matched Keywords</p>
                       <div className="flex flex-wrap gap-2">
                         {(result.matched_keywords || []).length === 0 ? (
-                          <span className="text-sm text-gray-500">None</span>
+                          <span className="text-xs px-3 py-1 rounded-full bg-green-100 text-green-700 shadow-sm">
+                            None
+                          </span>
                         ) : (
                           (result.matched_keywords || []).map((kw, i) => (
                             <span
                               key={i}
-                              className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700"
+                              className="text-xs px-3 py-1 rounded-full bg-amber-100 text-amber-700 shadow-sm"
                             >
                               {kw}
                             </span>
@@ -322,7 +337,7 @@ export default function AtsAnalyzer() {
                           Copy
                         </button>
                       </div>
-                      <pre className="whitespace-pre-wrap text-sm bg-gray-100 p-3 rounded mt-2">
+                      <pre className="whitespace-pre-wrap text-sm bg-slate-100 p-4 rounded-lg mt-2 border border-slate-200 shadow-inner">
                         {result.ai_feedback}
                       </pre>
                     </div>
