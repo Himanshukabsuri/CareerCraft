@@ -43,7 +43,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
   return (
     <aside
       className={`
-        fixed top-14 left-0 z-40
+        fixed top-14 left-0 z-40 mt-10
         h-[calc(100vh-56px)] w-72
         bg-white border-r border-gray-200
         transition-transform duration-300
@@ -53,11 +53,12 @@ const Sidebar = ({ sidebar, setSidebar }) => {
     >
       {/* ===== PROFILE ===== */}
       <div className="py-6 border-b border-gray-100 text-center">
-        <img
-          src="/avatar.png"
-          alt="User"
-          className="w-14 h-14 rounded-full mx-auto object-cover"
-        />
+     <img
+  src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+  alt="User"
+  className="w-20 h-20 rounded-full mx-auto object-cover bg-gray-100"
+ />
+
         <h2 className="mt-2 font-semibold text-gray-700">
           {username || "Loading..."}
         </h2>

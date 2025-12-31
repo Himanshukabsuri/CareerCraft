@@ -8,7 +8,7 @@ import Footer from '../components/Footer'
 import Resume_builderForm from './Resume_builderForm'
 const Home = () => {
   return (
-    <div >
+    <div>
         <Navbar/>
         <Hero/>
         <Tools/>

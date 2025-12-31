@@ -34,7 +34,7 @@ const Navbar = () => {
     <>
       {/* NAVBAR */}
       <nav
-        className={`fixed -top-1 left-0 w-full z-50 pt-3
+        className={`fixed -top-1 left-0 w-full z-50 pt-3 
         bg-white dark:bg-gray-950 shadow-md
         transition-colors duration-300 "
         ${
@@ -122,6 +122,7 @@ const Navbar = () => {
           </div>
         )}
       </nav>
+      
     </>
   );
 };
