@@ -155,7 +155,12 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    
+    "https://careercraft-1-stqr.onrender.com",
+    "localhost",
+    "127.0.0.1",
+]
 
 
 import os
