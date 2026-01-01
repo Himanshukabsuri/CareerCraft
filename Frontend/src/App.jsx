@@ -12,7 +12,7 @@ import ResumeHistory from './pages/ResumeHistory'
 import Login from './components/Login'
 import Contact from './pages/Contact'
 import Services from './pages/services'
-import AboutUs from './pages/aboutus' // Import AboutUs component
+import AboutUs from './pages/AboutUs' 
 import AtsAnalyzer from './pages/AtsAnalyzer'
 const App = () => {
   return (
