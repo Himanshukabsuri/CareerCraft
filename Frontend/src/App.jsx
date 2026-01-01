@@ -11,7 +11,7 @@ import RoadmapHistory from './pages/RoadmapHistory'
 import ResumeHistory from './pages/ResumeHistory'
 import Login from './components/Login'
 import Contact from './pages/Contact'
-import Services from './pages/services'
+import Services from './pages/Services'
 import AboutUs from './pages/AboutUs' 
 import AtsAnalyzer from './pages/AtsAnalyzer'
 const App = () => {
