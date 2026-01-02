@@ -11,7 +11,7 @@ import RoadmapHistory from './pages/RoadmapHistory'
 import ResumeHistory from './pages/ResumeHistory'
 import Login from './components/Login'
 import Contact from './pages/Contact'
-import Services from './pages/Services'
+import Services from './pages/services'
 import AboutUs from './pages/AboutUs' 
 import AtsAnalyzer from './pages/AtsAnalyzer'
 const App = () => {
@@ -30,7 +30,7 @@ const App = () => {
           <Route index element={<Dashboard />} />
           <Route path='Resume-builder' element={<ResumeBuilderForm/>}/>
           <Route path='/ai/resume-form' element={<ResumeForm />} />
-          <Route path='/ai/roadmap-history' element={<RoadmapHistory/>}/> {/* remove double slash */}
+          <Route path='/ai/roadmap-history' element={<RoadmapHistory/>}/> 
           <Route path="/ai/resume-history" element={<ResumeHistory />} />
           <Route path='AIPackageResult' element={<AIPackageResult/>}/>
         </Route>
