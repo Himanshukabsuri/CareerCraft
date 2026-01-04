@@ -2,19 +2,20 @@ import React, { useEffect, useState } from "react";
 import { ChevronDown, ChevronUp, Map } from "lucide-react";
 import Navbar from "../components/Navbar";
 
+import BASE_URL from "../components/Api";
 const RoadmapHistory = () => {
   const [loading, setLoading] = useState(true);
   const [roadmaps, setRoadmaps] = useState([]);
   const [openId, setOpenId] = useState(null);
 
-  const BASE_URL = "http://127.0.0.1:8000/api/";
+  const BASE = `${BASE_URL}/api/`;
   const token = localStorage.getItem("access_token");
 
   // ================= FETCH ROADMAP HISTORY =================
   useEffect(() => {
     const fetchRoadmaps = async () => {
       try {
-        const res = await fetch(`${BASE_URL}roadmap/history/`, {
+        const res = await fetch(`${BASE}roadmap/history/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

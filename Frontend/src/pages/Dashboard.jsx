@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Sparkles, FileText, Map } from "lucide-react";
 import Navbar from "../components/Navbar";
-
+import BASE_URL from "../components/Api";
 const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
@@ -11,19 +11,20 @@ const Dashboard = () => {
   const [resumeCount, setResumeCount] = useState(0);
   const [roadmapCount, setRoadmapCount] = useState(0);
 
-  const BASE_URL = "http://127.0.0.1:8000/api/";
+  // const BASE_URL = "http://127.0.0.1:8000/api/";
+  const BASE=`${BASE_URL}/api/`
   const token = localStorage.getItem("access_token");
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         const resumeRes = await fetch(
-          `${BASE_URL}resume/history/`,
+          `${BASE}resume/history/`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
         const roadmapRes = await fetch(
-          `${BASE_URL}roadmap/history/`,
+          `${BASE}roadmap/history/`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 

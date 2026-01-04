@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import BASE_URL from "../components/Api";
 const AboutUs = () => {
   const [loading, setLoading] = useState(true);
   const [aboutData, setAboutData] = useState(null);
@@ -10,7 +10,7 @@ const AboutUs = () => {
   useEffect(() => {
     const fetchAboutData = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/aboutus/");
+        const response = await fetch(`${BASE_URL}/api/aboutus/`);
         const data = await response.json();
 
         if (response.ok) {

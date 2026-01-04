@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from "./Api";
 
 const Login = () => {
   const navigate = useNavigate();
-  const API_URL = "http://127.0.0.1:8000/api";
-
+  // const API_URL = "http://127.0.0.1:8000/api";
+  const API_URL = `${BASE_URL}/api`;
   const [mode, setMode] = useState("login"); // login | signup
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

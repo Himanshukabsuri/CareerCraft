@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { PlusCircle } from "lucide-react";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loading";
-
+import BASE_URL from "../components/Api";
 
 const ResumeForm = () => {
   const [formData, setFormData] = useState({
@@ -58,7 +58,7 @@ const ResumeForm = () => {
     try {
       // 1️⃣ SAVE RESUME DATA
       const saveRes = await axios.post(
-        "http://127.0.0.1:8000/api/resume/",
+        `${BASE_URL}/api/resume/`,
         formData,
         {
           headers: {
@@ -74,7 +74,7 @@ const ResumeForm = () => {
 
       // 2️⃣ GENERATE RESUME PDF
       const genRes = await axios.post(
-        "http://127.0.0.1:8000/api/generate_resume/",
+        `${BASE_URL}/api/generate_resume/`,
         { student_id: studentId },
         {
           headers: {

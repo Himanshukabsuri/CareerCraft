@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Loader from "../components/Loading";
-
+import BASE_URL from "../components/Api";
 function ResumeBuilderForm() {
   const [resumedata, setResumedata] = useState({
     name: "",
@@ -37,7 +37,7 @@ function ResumeBuilderForm() {
 
       // 1️⃣ Save student form
       const saveRes = await axios.post(
-        "http://127.0.0.1:8000/api/form/",
+      `${BASE_URL}/api/form/`,
         {
           name: resumedata.name,
           // dob: resumedata.dob,
@@ -63,7 +63,7 @@ function ResumeBuilderForm() {
 
       // 2️⃣ Generate only roadmap
       const roadmapRes = await axios.post(
-        "http://127.0.0.1:8000/api/generate_roadmap/",
+        `${BASE_URL}/api/generate_roadmap/`,
         { student_id: studentId },
         {
           headers: {

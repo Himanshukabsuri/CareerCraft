@@ -3,6 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Loader from "../components/Loading";
 import Sidebar from "../components/Sidebar";
+import BASE_URL from "../components/Api";
 
 export default function AtsAnalyzer() {
   const [file, setFile] = useState(null);
@@ -78,7 +79,7 @@ export default function AtsAnalyzer() {
     setLoading(true);
     try {
       const token = getAccessToken();
-      const res = await fetch("http://127.0.0.1:8000/api/ats/analyze/", {
+      const res = await fetch(`${BASE_URL}/api/ats/analyze/`, {
         method: "POST",
         headers: token ? { Authorization: `Bearer ${token}` } : {},
         body: form,

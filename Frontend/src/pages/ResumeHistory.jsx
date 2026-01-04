@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { FileText, Download, ExternalLink } from "lucide-react";
 import Navbar from "../components/Navbar";
-
+import BASE_URL from "../components/Api";
 const ResumeHistory = () => {
   const [loading, setLoading] = useState(true);
   const [resumes, setResumes] = useState([]);
 
-  const BASE_URL = "http://127.0.0.1:8000/api/";
+  const BASE = `${BASE_URL}/api/`;
   const token = localStorage.getItem("access_token");
 
   // ===== FETCH RESUME HISTORY =====
   useEffect(() => {
     const fetchResumes = async () => {
       try {
-        const res = await fetch(`${BASE_URL}resume/history/`, {
+        const res = await fetch(`${BASE}resume/history/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

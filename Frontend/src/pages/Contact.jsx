@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-
+import BASE_URL from "../components/Api";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -25,7 +25,7 @@ const Contact = () => {
     setError("");
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/contactus/", {
+      const res = await fetch(`${BASE_URL}/api/contactus/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

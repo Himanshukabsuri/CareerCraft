@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { House, FileText, ScanSearch } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import BASE_URL from "./Api";
 
 const navItems = [
   { to: "/ai", label: "Dashboard", Icon: House },
@@ -21,7 +22,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
     const token = localStorage.getItem("access") || localStorage.getItem("access_token");
     if (!token) return;
 
-    fetch("http://localhost:8000/api/user/", {
+    fetch(`${BASE_URL}/api/user/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
